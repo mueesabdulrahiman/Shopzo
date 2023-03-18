@@ -56,7 +56,7 @@ List<Widget> bannerImages = [
 //   CategoryIcon(icon: FontAwesomeIcons.gift, text: 'Gifts'),
 // ];
 
-List<Widget> categoryIcons = const [
+List<CategoryIcon> categoryIcons = const [
   CategoryIcon(icon: 'assets/cleaning.png', text: 'Cleaning'),
   CategoryIcon(icon: 'assets/detergent.png', text: 'Detergent'),
   CategoryIcon(icon: 'assets/soap.png', text: 'Soap'),

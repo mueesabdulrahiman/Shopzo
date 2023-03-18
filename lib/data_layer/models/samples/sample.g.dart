@@ -26,6 +26,7 @@ Sample _$SampleFromJson(Map<String, dynamic> json) => Sample(
       images: (json['images'] as List<dynamic>?)
           ?.map((e) => Imagee.fromJson(e as Map<String, dynamic>))
           .toList(),
+      flag: json['flag'] as bool? ?? false,
     )..inStock = json['in_stock'] as bool?;
 
 Map<String, dynamic> _$SampleToJson(Sample instance) => <String, dynamic>{
@@ -43,4 +44,5 @@ Map<String, dynamic> _$SampleToJson(Sample instance) => <String, dynamic>{
       'categories': instance.categories,
       'tags': instance.tags,
       'images': instance.images,
+      'flag': instance.flag,
     };

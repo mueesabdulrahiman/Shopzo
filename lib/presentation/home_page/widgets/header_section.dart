@@ -1,3 +1,4 @@
+//import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_x/presentation/widgets/temp_data.dart';
 
@@ -23,4 +24,20 @@ class TopSection extends StatelessWidget {
       ),
     );
   }
+
+  // Widget imageCarousel(BuildContext context) {
+  //   return Container(
+  //     width: size.width * 0.7,
+  //     child: Carousel(
+  //       overlayShadow: false,
+  //       borderRadius: true,
+  //       boxFit: BoxFit.none,
+  //       autoplay: true,
+  //       dotSize: 3.0,
+  //       images: bannerImages,
+      
+  //     )
+
+  //   );
+  // }
 }
