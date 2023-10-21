@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
+import 'package:shop_x/logic_layer/home_page/home_page_event.dart';
 import 'package:shop_x/messaging.dart';
 import 'package:shop_x/presentation/cart_page/cart_page.dart';
 import 'package:shop_x/presentation/home_page/product_details_page.dart';
@@ -18,19 +19,19 @@ import 'package:shop_x/presentation/home_page/widgets/middle_section.dart';
 import 'package:shop_x/presentation/home_page/widgets/serach_widget.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
 
-final _scaffoldKey = GlobalKey<ScaffoldState>();
-final siz = MediaQuery.of(_scaffoldKey.currentContext!).size;
-//const String SAVE_KEY_NAME = 'userLoggedIn';
-
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final homeSize = MediaQuery.of(context).size;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // BlocProvider.of<HomePageBloc>(context).add(FetchCategories());
+      // BlocProvider.of<HomePageBloc>(context).add(FetchProducts());
+      BlocProvider.of<HomePageBloc>(context).add(LoadHomeData());
+    });
 
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         iconTheme: ThemeData().iconTheme,
         backgroundColor: Colors.white,
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
         actions: [
           searchWidget(),
           SizedBox(
-            width: size.width * 0.05,
+            width: homeSize.width * 0.05,
           ),
           GestureDetector(
             onTap: () => Navbar.notifier.value = 1,
@@ -47,7 +48,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: size.width * 0.05,
+            width: homeSize.width * 0.05,
           ),
         ],
       ),
@@ -55,7 +56,6 @@ class HomePage extends StatelessWidget {
       body: BlocBuilder<HomePageBloc, HomePageState>(
         builder: (context, state) {
           if (state is SearchedProducts && state.searchProducts.isNotEmpty) {
-            log('sea');
             final products = state.searchProducts;
 
             return GridView.count(
@@ -178,50 +178,83 @@ class HomePage extends StatelessWidget {
           } else if (state is SearchedProducts &&
               state.searchProducts.isEmpty) {
             return const Center(
-              child: Text('Products is empty'),
+              child: Text('No Products'),
             );
           } else if (state is SearchActive) {
             return Container();
-          } else if (state is SearchLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+          } else if (state is HomeDataLoaded &&
+              state.products.isNotEmpty &&
+              state.categories.isNotEmpty) {
+            return BlocBuilder<HomePageBloc, HomePageState>(
+              builder: (context, state) {
+                final currentState = state as HomeDataLoaded;
+
+                return ListView(
+                  children: [
+                    SizedBox(
+                      height: homeSize.width * 0.38,
+                      child: TopSection(size: homeSize),
+                    ),
+                    const Divider(
+                      thickness: 6.0,
+                    ),
+                    SizedBox(
+                      height: homeSize.width * 0.02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Categories',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              BottomSection.clickedCategoryProducts.value = [];
+                            },
+                            child: const Text(
+                              'Show all',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: homeSize.width * 0.05,
+                    ),
+                    SizedBox(
+                      height: homeSize.width * 0.18,
+                      child: MiddleSection(
+                        size: homeSize,
+                        categories: currentState.categories,
+                      ),
+                    ),
+                    SizedBox(
+                      height: homeSize.width * 0.02,
+                    ),
+                    const Divider(
+                      thickness: 6.0,
+                    ),
+                    BottomSection(
+                      products: currentState.products,
+                    ),
+                  ],
+                );
+              },
             );
           } else {
-            return ListView(
-              children: [
-                SizedBox(
-                  height: size.width * 0.38,
-                  child: TopSection(size: size),
-                ),
-                const Divider(
-                  thickness: 6.0,
-                ),
-                SizedBox(
-                  height: size.width * 0.02,
-                ),
-                const Text(
-                  'Categories',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: size.width * 0.05,
-                ),
-                SizedBox(
-                  height: size.width * 0.18,
-                  child: MiddleSection(size: size),
-                ),
-                SizedBox(
-                  height: size.width * 0.02,
-                ),
-                const Divider(
-                  thickness: 6.0,
-                ),
-                BottomSection(),
-              ],
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         },

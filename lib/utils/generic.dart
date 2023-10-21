@@ -26,12 +26,7 @@ class BasePageState<T extends BasePage> extends State<T> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          // const CheckPoints(
-          //   checkPoints: ["Processing", "Delivering", "Completed"],
-          //   checkTill: 0,
-          //   checkPointsFillColor: Colors.green,
-          // ),
-          // const Divider(color: Colors.grey),
+       
           pageUI(),
         ],
       )),

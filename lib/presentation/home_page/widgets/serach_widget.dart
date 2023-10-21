@@ -12,7 +12,7 @@ class searchWidget extends StatelessWidget {
   }) : super(key: key);
 
   final _debounce = Debouncer(milliseconds: 500);
-  late bool folded;
+   bool folded = true;
 
 
   @override
@@ -45,11 +45,11 @@ class searchWidget extends StatelessWidget {
                             border: InputBorder.none,
                           ),
                           onChanged: (query) {
-                            if (query.isEmpty) {
-                              context
-                                  .read<HomePageBloc>()
-                                  .add(FetchProducts());
-                            }
+                            // if (query.isEmpty) {
+                            //   context
+                            //       .read<HomePageBloc>()
+                            //       .add(FetchProducts());
+                            // }
 
                             if (query.isNotEmpty) {
                               _debounce.run(() {

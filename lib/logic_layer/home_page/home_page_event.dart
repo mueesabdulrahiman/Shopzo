@@ -16,10 +16,19 @@ class FetchProducts extends HomePageEvent {}
 class SearchProducts extends HomePageEvent {
   final String? searchQuery;
   final bool? clearQuery;
-  SearchProducts({this.searchQuery,this.clearQuery});
+  SearchProducts({this.searchQuery, this.clearQuery});
 }
 
 class SearchAnimation extends HomePageEvent {
   // final bool flag;
   // SearchAnimation({required this.flag});
+}
+
+class FetchCategories extends HomePageEvent {}
+
+class LoadHomeData extends HomePageEvent {}
+
+class GetCategoryProducts extends HomePageEvent {
+  final String categoryName;
+  GetCategoryProducts({required this.categoryName});
 }

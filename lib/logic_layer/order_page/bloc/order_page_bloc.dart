@@ -12,7 +12,7 @@ import 'package:shop_x/presentation/cart_page/success_page.dart';
 part 'order_page_event.dart';
 part 'order_page_state.dart';
 
-class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {
+class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {          
   final ApiServices apiServices;
   bool? orderCreated;
   CustomerDetailsModel? customerDetails;

@@ -20,7 +20,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     super.initState();
-    getData().whenComplete(() => setState(() {}));
+    //getData().whenComplete(() => setState(() {}));
   }
 
   Future<List<OrderModel>> getData() async {
@@ -40,18 +40,26 @@ class _OrderPageState extends State<OrderPage> {
           if (snapshot.hasData) {
             if (snapshot.data!) {
               return Scaffold(
-                  appBar: AppBar(
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    title: const Text(
-                      'Order Page',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    centerTitle: true,
+                appBar: AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  title: const Text(
+                    'Order Page',
+                    style: TextStyle(color: Colors.black),
                   ),
-                  body: orders.isNotEmpty
-                      ? _listView(context, orders)
-                      : const Center(child: CircularProgressIndicator()));
+                  centerTitle: true,
+                ),
+                body: FutureBuilder(
+                  future: getData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _listView(context, snapshot.data!);
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              );
             } else {
               return const UnAuthWidget();
             }

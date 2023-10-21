@@ -57,11 +57,11 @@ List<Widget> bannerImages = [
 // ];
 
 List<CategoryIcon> categoryIcons = const [
-  CategoryIcon(icon: 'assets/cleaning.png', text: 'Cleaning'),
-  CategoryIcon(icon: 'assets/detergent.png', text: 'Detergent'),
-  CategoryIcon(icon: 'assets/soap.png', text: 'Soap'),
-  CategoryIcon(icon: 'assets/plant1.png', text: 'Plants'),
-  CategoryIcon(icon: 'assets/hygiene.png', text: 'Hygiene Products')
+  // CategoryIcon(icon: 'assets/cleaning.png', text: 'Cleaning'),
+  // CategoryIcon(icon: 'assets/detergent.png', text: 'Detergent'),
+  // CategoryIcon(icon: 'assets/soap.png', text: 'Soap'),
+  // CategoryIcon(icon: 'assets/plant1.png', text: 'Plants'),
+  // CategoryIcon(icon: 'assets/hygiene.png', text: 'Hygiene Products')
   // CategoryIcon(icon: 'assets/clothes.png', text: 'Clothing'),
   // CategoryIcon(icon: 'assets/tech2.png', text: 'Smart Devices'),
   // CategoryIcon(icon: 'assets/briefcase.png', text: 'Bag'),

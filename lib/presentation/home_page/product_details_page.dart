@@ -10,9 +10,8 @@ import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
 
-final _scaffoldKey = GlobalKey();
-
-final size = MediaQuery.of(_scaffoldKey.currentContext!).size;
+final _scaffoldKey = GlobalKey<ScaffoldState>();
+final productSize = MediaQuery.of(_scaffoldKey.currentContext!).size;
 
 class ProductDetailsPage extends StatelessWidget {
   ProductDetailsPage(
@@ -56,6 +55,7 @@ class ProductDetailsPage extends StatelessWidget {
   int width = 0;
 
   String c = '';
+
 
   void getDetails() {
     // retrieve categorys
@@ -120,8 +120,8 @@ class ProductDetailsPage extends StatelessWidget {
                         imageBuilder: (context, imageProvider) {
                           return Image(
                             //imageProvider,
-                            height: size.height * 0.4,
-                            width: size.width * 0.8,
+                            height: productSize.height * 0.4,
+                            width: productSize.width * 0.8,
                             //imageProvider.
                             fit: BoxFit.fitWidth,
                             image: imageProvider,

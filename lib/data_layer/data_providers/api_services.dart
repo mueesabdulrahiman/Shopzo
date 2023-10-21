@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shop_x/config.dart';
+import 'package:shop_x/data_layer/models/categories.dart';
 import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/data_layer/models/login_model.dart';
 import 'package:shop_x/data_layer/models/order_details_model.dart';
@@ -120,8 +121,8 @@ class ApiServices {
   }
 // get categories
 
-  Future<List<Category>> getCategories() async {
-    List<Category> categories = [];
+  Future<List<Categories>> getCategories() async {
+    List<Categories> categories = [];
     try {
       final response = await Dio().get(
           '${Config.url}${Config.categoriesUrl}?consumer_key=${Config.key}&consumer_secret=${Config.secret}',
@@ -129,7 +130,7 @@ class ApiServices {
               headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
       if (response.statusCode == 200 || response.statusCode == 201) {
         categories =
-            (response.data as List).map((e) => Category.fromJson(e)).toList();
+            (response.data as List).map((e) => Categories.fromJson(e)).toList();
       }
     } on DioError catch (e) {
       log(e.response.toString());

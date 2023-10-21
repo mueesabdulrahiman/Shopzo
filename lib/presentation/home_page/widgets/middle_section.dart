@@ -1,15 +1,17 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:shop_x/data_layer/data_providers/api_services.dart';
-import 'package:shop_x/presentation/widgets/temp_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_x/data_layer/models/categories.dart';
+import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
+import 'package:shop_x/presentation/home_page/widgets/bottom_section.dart';
+import 'package:shop_x/presentation/widgets/category_widget.dart';
 
 class MiddleSection extends StatelessWidget {
-   MiddleSection({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
+  const MiddleSection({Key? key, required this.size, required this.categories})
+      : super(key: key);
 
+  final List<Categories> categories;
   final Size size;
-  ApiServices apiService = ApiServices();
 
   @override
   Widget build(BuildContext context) {
@@ -22,26 +24,33 @@ class MiddleSection extends StatelessWidget {
         separatorBuilder: (context, index) => SizedBox(
           width: size.width * 0.1,
         ),
-        itemBuilder: (context, index) => GestureDetector(
-            onTap: () {
-              // categoryIcons.contains(categoryIcons[index].text).toList;
-            },
-            child: categoryIcons[index]),
-        itemCount: categoryIcons.length,
+        itemBuilder: (context, index) {
+          final data = categories[index];
+          return GestureDetector(
+              onTap: () {
+                log('clicked');
+                // context.read<HomePageBloc>().add(GetCategoryProducts(categoryName: data.categoryName!));
+                BottomSection.clickedCategoryProducts.value.clear();
+                final totalProducts =
+                    BlocProvider.of<HomePageBloc>(context).products ?? [];
+
+                BottomSection.clickedCategoryProducts.value =
+                    totalProducts.where((e) {
+                  final categoryNames =
+                      e.categories?.map((e) => e.name).toList() ?? [];
+                  return categoryNames.contains(data.categoryName);
+                }).toList();
+                BottomSection.clickedCategoryProducts.notifyListeners;
+                log(BottomSection.clickedCategoryProducts.toString());
+              },
+              child: CategoryIcon(
+                icon: data.image!.src!,
+                text: data.categoryName!,
+                size: size,
+              ));
+        },
+        itemCount: categories.length,
       ),
     );
   }
-
-  // Widget _categoriesList() {
-  //   return FutureBuilder(
-  //       future: apiService.getCategories(),
-  //       builder: ((context, snapshot) {
-  //         if (snapshot.hasData) {
-  //           return snapshot.data;
-  //         }
-  //         return const Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       }));
-  // }
 }

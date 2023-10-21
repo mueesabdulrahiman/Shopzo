@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   ApiServices apiServices = ApiServices();
 
   final _pages = [
-    HomePage(),
+    const HomePage(),
      CartPage(),
     const OrderPage(),
     const AccountPage()

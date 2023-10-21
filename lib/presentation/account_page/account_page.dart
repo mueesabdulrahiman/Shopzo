@@ -49,6 +49,7 @@ class _AccountPageState extends State<AccountPage> {
     optionList.add(
       OptionList('Sign Out', 'Logout from device', Icons.logout, () {
         showDialogBox(context);
+
         //SharedPrefService.logout().then((value) => setState(() {}));
       }),
     );
@@ -157,8 +158,10 @@ class _AccountPageState extends State<AccountPage> {
             contentPadding: const EdgeInsets.all(10),
             actions: [
               TextButton(
-                  onPressed: () => SharedPrefService.logout()
-                      .then((value) => setState(() {})),
+                  onPressed: () => SharedPrefService.logout().then((value) {
+                        setState(() {});
+                        Navigator.pop(context);
+                      }),
                   child: const Text('Yes')),
               TextButton(
                   onPressed: () => Navigator.pop(context),

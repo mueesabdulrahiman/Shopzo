@@ -1,18 +1,18 @@
-class Category {
+class Categories {
   int? categoryId;
   String? categoryName;
   String? categoryDesc;
   int? parent;
   Imagee? image;
-  Category(
+  Categories(
       {this.categoryId,
       this.categoryName,
       this.categoryDesc,
       this.parent,
       this.image});
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory Categories.fromJson(Map<String, dynamic> json) {
+    return Categories(
       categoryId: json['id'],
       categoryName: json['name'],
       categoryDesc: json['description'],
