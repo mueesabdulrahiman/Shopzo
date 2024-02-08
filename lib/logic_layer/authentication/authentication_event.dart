@@ -9,18 +9,31 @@ abstract class AuthenticationEvent extends Equatable {
 
 class RegisteringUser extends AuthenticationEvent {
   final Customer customer;
-
-  const RegisteringUser({required this.customer});
+  final BuildContext context;
+  const RegisteringUser(this.context, {required this.customer});
 }
 
 class LoggingUser extends AuthenticationEvent {
   final String email;
   final String password;
+  final BuildContext context;
 
-  const LoggingUser({
+  const LoggingUser(
+    this.context, {
     required this.email,
     required this.password,
   });
 }
 
 class LogoutUser extends AuthenticationEvent {}
+
+class PasswordVisibility extends AuthenticationEvent {}
+
+class LoadCustomerDetails extends AuthenticationEvent {}
+
+class EditCustomerDetails extends AuthenticationEvent {
+  final CustomerDetailsModel? updateCustomer;
+  const EditCustomerDetails({required this.updateCustomer});
+}
+
+class DeleteCustomerDetails extends AuthenticationEvent {}

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +7,7 @@ import 'package:shop_x/data_layer/models/samples/tag.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
+import 'package:sizer/sizer.dart';
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 final productSize = MediaQuery.of(_scaffoldKey.currentContext!).size;
@@ -54,28 +53,14 @@ class ProductDetailsPage extends StatelessWidget {
   int height = 0;
   int width = 0;
 
-  String c = '';
-
-
   void getDetails() {
-    // retrieve categorys
-    // if(categories!.isNotEmpty){
-    //  parsedCategory = categories!.sublist(1, categories!.length -1 );
-    // }
-
     categories!.map((Category value) {
-      //value.name!.replaceAll(RegExp(r'[]'), '');
-      category += '${value.name!} ';
-
-      // return category.add(value.name!);
+      category += '${value.name!}, ';
     }).toList();
-    // log(c);
 
     // retrieve tags
     tags!.map((Tag value) {
-      tag += "${value.name!} ";
-      //value.name!.replaceAll(RegExp(r'[]'), '');
-      // return tag.add(value.name!);
+      tag += "${value.name!}, ";
     }).toList();
     // retrieve images
     images!.map((Imagee value) => image.add(value.src!)).toList();
@@ -91,21 +76,27 @@ class ProductDetailsPage extends StatelessWidget {
     getDetails();
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Product Details',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Lato',
+              fontSize: 15.sp),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+          padding: EdgeInsets.all(10.sp),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -119,10 +110,8 @@ class ProductDetailsPage extends StatelessWidget {
                         imageUrl: image.first,
                         imageBuilder: (context, imageProvider) {
                           return Image(
-                            //imageProvider,
-                            height: productSize.height * 0.4,
-                            width: productSize.width * 0.8,
-                            //imageProvider.
+                            height: 40.h,
+                            width: 80.w,
                             fit: BoxFit.fitWidth,
                             image: imageProvider,
                           );
@@ -134,173 +123,159 @@ class ProductDetailsPage extends StatelessWidget {
                       )),
                 ],
               ),
-
+              SizedBox(height: 0.5.h),
               Text(
                 name!,
                 maxLines: 2,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Lato'),
               ),
-              const Spacer(
-                flex: 1,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('$sku',
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                          fontFamily: 'Lato')),
+                ],
               ),
-              RichText(
-                text: TextSpan(text: '', children: [
-                  TextSpan(
-                    text: realPrice.toString(),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      decoration: TextDecoration.lineThrough,
-                      fontSize: 18.0,
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(text: '', children: [
+                          TextSpan(
+                            text: realPrice.toString(),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w700,
+                              decoration: TextDecoration.lineThrough,
+                              fontFamily: 'Lato',
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                          WidgetSpan(
+                              child: SizedBox(
+                            width: 2.w,
+                          )),
+                          TextSpan(
+                              text: "₹$discountPrice",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Lato',
+                                fontSize: 14.sp,
+                              ))
+                        ]),
+                      ),
+                      Text('$stock in stock',
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
+                              fontFamily: 'Lato',
+                              fontSize: 10.sp)),
+                    ],
                   ),
-                  const WidgetSpan(
-                      child: SizedBox(
-                    width: 5,
-                  )),
-                  TextSpan(
-                      text: discountPrice.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ))
-                ]),
+                  CartCounter(
+                    numOfProducts: 01,
+                    height: 4.h,
+                    width: 25.w,
+                  ),
+                ],
               ),
-              const Divider(thickness: 1),
-
+              SizedBox(height: 1.h),
               Text(
                 parsedDescription,
                 maxLines: 5,
                 textAlign: TextAlign.justify,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontFamily: 'Lato',
+                ),
               ),
-              const Spacer(),
-
-              Text('Availability : $stock in stock',
-                  style: TextStyle(color: Colors.grey.shade600)),
-              const Spacer(),
-              const Divider(
-                thickness: 1,
-              ),
-              // const Spacer(),
-              Text('SKU: $sku', style: TextStyle(color: Colors.grey.shade600)),
-              const Spacer(
-                flex: 1,
-              ),
+              Divider(thickness: 0.2.h),
               Text('Categories: $category',
-                  style: TextStyle(color: Colors.grey.shade600)),
-              const Spacer(),
-              Text('Tags: $tag', style: TextStyle(color: Colors.grey.shade600)),
-
-              const Spacer(
-                flex: 5,
-              ),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontFamily: 'Lato',
+                      fontSize: 10.sp)),
+              Text('Tags: $tag',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontFamily: 'Lato',
+                      fontSize: 10.sp)),
               const Spacer(),
               Row(
                 children: [
-                  CartCounter(
-                    numOfProducts: 01,
+                  SizedBox(
+                    height: 7.h,
+                    child: GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<CartPageCubit>(context).addToCart(
+                          context,
+                          name: name!,
+                          salePrice: (discountPrice ?? 0.00).toString(),
+                          image: image.first,
+                          count: CartCounter.updatedCount,
+                          id: int.parse(id),
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.green.shade300,
+                        radius: 10.w,
+                        child: Center(
+                          child: Icon(
+                            Icons.shopping_cart,
+                            size: 20.sp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<CartPageCubit>(context).addToCart(
-                            context,
-                            name: name!,
-                            salePrice: (discountPrice ?? 0.00).toString(),
-                            image: image.first,
-                            count: CartCounter.updatedCount,
-                            id: int.parse(id),
-                          );
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(20)),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)))),
-                        child: const Text('Add to Cart')),
-                    //  BlocBuilder<CartPageCubit, CartPageState>(
-                    //   builder: (context, state) {
-                    //     log('details');
-                    //     log(state.toString());
-                    //     if (state is ViewCartPage && state.flag == true) {
-                    //       log("view state :${state.flag}");
-                    //       return ElevatedButton.icon(
-                    //         style: ButtonStyle(
-                    //             padding: MaterialStateProperty.all(
-                    //                 const EdgeInsets.all(20)),
-                    //             shape: MaterialStateProperty.all<
-                    //                     RoundedRectangleBorder>(
-                    //                 RoundedRectangleBorder(
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(20)))),
-                    //         label: const Text('View Cart'),
-                    //         icon: const Icon(Icons.shopping_cart),
-                    //         onPressed: () {
-                    //           Navigator.pop(context);
-                    //           Navbar.notifier.value = 1;
-
-                    //           BlocProvider.of<CartPageCubit>(context).addToCart(
-                    //             context,
-                    //             name: name!,
-                    //             salePrice: (discountPrice ?? 0.00).toString(),
-                    //             image: image.first,
-                    //             count: CartCounter.updatedCount,
-                    //             id: int.parse(id),
-                    //           );
-                    //         },
-                    //       );
-                    //     } else {
-                    //       return ElevatedButton.icon(
-                    //         style: ButtonStyle(
-                    //             padding: MaterialStateProperty.all(
-                    //                 const EdgeInsets.all(20)),
-                    //             shape: MaterialStateProperty.all<
-                    //                     RoundedRectangleBorder>(
-                    //                 RoundedRectangleBorder(
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(20)))),
-                    //         label: const Text('Add To Cart'),
-                    //         icon: const Icon(Icons.shopping_cart),
-                    //         onPressed: () {
-                    //           BlocProvider.of<CartPageCubit>(context).addToCart(
-                    //             context,
-                    //             name: name!,
-                    //             salePrice: (discountPrice ?? 0.00).toString(),
-                    //             image: image.first,
-                    //             count: CartCounter.updatedCount,
-                    //             id: int.parse(id),
-                    //           );
-                    //         },
-                    //       );
-                    //     }
-                    //   },
-                    // ),
-                  ),
-                  const SizedBox(
-                    width: 10,
+                  SizedBox(
+                    width: 2.w,
                   ),
                   Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navbar.notifier.value = 1;
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(20)),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)))),
-                        child: const Text('View Cart')),
+                    child: SizedBox(
+                      height: 7.h,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<CartPageCubit>(context).addToCart(
+                              context,
+                              name: name!,
+                              salePrice: (discountPrice ?? 0.00).toString(),
+                              image: image.first,
+                              count: CartCounter.updatedCount,
+                              id: int.parse(id),
+                            );
+                            Navigator.pop(context);
+                            Navbar.notifier.value = 1;
+                          },
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.all(10.sp)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp)))),
+                          child: Text('Buy Now',
+                              style: TextStyle(
+                                  fontFamily: 'Lato', fontSize: 12.sp))),
+                    ),
                   ),
                 ],
               ),

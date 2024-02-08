@@ -1,24 +1,26 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
-import 'package:shop_x/data/shop_repository.dart';
+import 'package:shop_x/globals.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
 import 'package:shop_x/logic_layer/loading/loading_cubit.dart';
 import 'package:shop_x/logic_layer/order_page/bloc/order_page_bloc.dart';
-import 'package:shop_x/presentation/authentication_page/login_page.dart';
-import 'package:shop_x/presentation/authentication_page/signup_page.dart';
-import 'package:shop_x/presentation/home_page/home_page.dart';
+import 'package:shop_x/logic_layer/theme/theme_bloc.dart';
+import 'package:shop_x/presentation/flash_page.dart';
 import 'package:shop_x/presentation/main_page.dart';
+import 'package:shop_x/utils/theme.dart';
+import 'package:sizer/sizer.dart';
 
-import 'messaging.dart';
 import 'globals.dart' as globals;
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  //  SystemChrome.setEnabledSystemUIMode(
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setEnabledSystemUIMode(
   //   SystemUiMode.immersiveSticky,
   // );
   // await SystemChannels.platform.invokeMethod<void>(
@@ -26,7 +28,9 @@ void main() {
   // );
   globals.appNavigator = GlobalKey<NavigatorState>();
 
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(enabled: false, builder: (context) => const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -36,6 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),
         BlocProvider<AuthenticationBloc>(
           create: ((context) => AuthenticationBloc(apiServices: ApiServices())),
         ),
@@ -47,13 +52,25 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CartPageCubit>(create: (context) => CartPageCubit()),
         BlocProvider<OrderPageBloc>(
-      create: (context) => OrderPageBloc(apiServices: ApiServices())),
+            create: (context) => OrderPageBloc(apiServices: ApiServices())),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        navigatorKey: globals.appNavigator,
-        home: MainPage(),
-      ),
+      child: Sizer(builder: (context, orientation, deviceType) {
+        return BlocBuilder<ThemeBloc, ThemeMode>(
+          builder: (context, state) {
+            return MaterialApp(
+              key: snackbarKey,
+              debugShowCheckedModeBanner: false,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
+              navigatorKey: globals.appNavigator,
+              theme: lightTheme,
+              themeMode: state,
+              darkTheme: darkTheme,
+              home: const SpalshScreenPage(),
+            );
+          },
+        );
+      }),
     );
   }
 }

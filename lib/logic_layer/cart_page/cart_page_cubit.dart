@@ -1,11 +1,9 @@
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_x/data_layer/data_providers/api_services.dart';
-import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
 import 'package:shop_x/presentation/cart_page/cart_page.dart';
+import 'package:shop_x/presentation/cart_page/widgets/cart_card_widget.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
 
 part 'cart_page_state.dart';

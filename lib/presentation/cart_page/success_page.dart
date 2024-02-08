@@ -17,13 +17,13 @@ class _SuccessPageState extends State<SuccessPage>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
+    super.initState();
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(controller);
-    super.initState();
-    controller.addListener(() {
-      setState(() {});
-    });
+    // controller.addListener(() {
+    //   setState(() {});
+    // });
     controller.forward();
   }
 
@@ -43,18 +43,21 @@ class _SuccessPageState extends State<SuccessPage>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: animation.value * 100,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
+                Transform.scale(
+                  scale: animation.value,
+                  child: Container(
+                    height: animation.value * 100.0,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                        child: Icon(
+                      Icons.check,
+                      size: animation.value * 50.0,
+                      color: Colors.white,
+                    )),
                   ),
-                  child: Center(
-                      child: Icon(
-                    Icons.check,
-                    size: animation.value * 50.0,
-                    color: Colors.white,
-                  )),
                 ),
                 const SizedBox(
                   height: 10.0,

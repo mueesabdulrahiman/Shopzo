@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class CheckPoints extends StatelessWidget {
-  const CheckPoints(
+  CheckPoints(
       {super.key,
       this.checkTill = 1,
       required this.checkPoints,
@@ -11,7 +12,7 @@ class CheckPoints extends StatelessWidget {
   final List<String> checkPoints;
   final Color checkPointsFillColor;
 
-  final double circleDia = 32;
+  final double circleDia = 4.h;
 
   @override
   Widget build(BuildContext context) {
@@ -21,39 +22,38 @@ class CheckPoints extends StatelessWidget {
             (constraints.maxWidth - (32 * (checkPoints.length + 1))) /
                 (checkPoints.length - 1);
         return SizedBox(
-          height: 65,
+          height: 10.h,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(7.0),
+                  padding: EdgeInsets.all(5.sp),
                   child: Row(
                       children: checkPoints.map((e) {
                     int index = checkPoints.indexOf(e);
-                    print(e.toString());
 
                     return SizedBox(
                       height: circleDia,
                       child: Row(children: [
                         Container(
                           width: circleDia,
-                          padding: const EdgeInsets.all(4),
+                          padding: EdgeInsets.all(3.sp),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: index <= checkTill
                                 ? checkPointsFillColor
                                 : checkPointsFillColor.withOpacity(0.2),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.done,
-                            size: 18,
+                            size: 15.sp,
                             color: Colors.white,
                           ),
                         ),
                         index != (checkPoints.length - 1)
                             ? Container(
                                 width: cWidth,
-                                height: 4,
+                                height: 0.4.h,
                                 color: index < checkTill
                                     ? checkPointsFillColor
                                     : checkPointsFillColor.withOpacity(0.2),
@@ -70,8 +70,14 @@ class CheckPoints extends StatelessWidget {
                     children: checkPoints
                         .map((e) => Text(
                               e,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Lato',
+                                  fontSize: 10.sp),
                             ))
                         .toList(),
                   ),

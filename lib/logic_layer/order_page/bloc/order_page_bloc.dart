@@ -5,20 +5,21 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/orders.dart';
-import 'package:shop_x/data_layer/models/userDetailsModel.dart';
+import 'package:shop_x/data_layer/models/user_details_model.dart';
 import 'package:shop_x/presentation/cart_page/cart_page.dart';
 import 'package:shop_x/presentation/cart_page/success_page.dart';
 
 part 'order_page_event.dart';
 part 'order_page_state.dart';
 
-class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {          
+class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {
   final ApiServices apiServices;
   bool? orderCreated;
   CustomerDetailsModel? customerDetails;
   OrderPageBloc({required this.apiServices}) : super(OrderPageInitial()) {
+    
     on<CreateOrder>((event, emit) async {
-      emit(Loading());    
+      emit(Loading());
       OrderModel orderModel = OrderModel();
       Navigator.push(event.context,
           MaterialPageRoute(builder: (ctx) => const SuccessPage()));
@@ -52,18 +53,9 @@ class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {
           log("order result: $orderCreated");
           emit(OrderCreated(orders: orderCreated));
 
-          CartPage.cartProductsNotifier.value.clear();
+           CartPage.cartProductsNotifier.value.clear();
 
-          // Navigator.push(
-          //     _scaffoldKey
-          //         .currentContext!,
-          //     MaterialPageRoute(
-          //         builder: (ctx) =>
-          //             const SuccessPage()));
-          // CartPage
-          //     .cartProductsNotifier
-          //     .value
-          //     .clear();
+         
         }
       }
     });

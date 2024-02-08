@@ -23,6 +23,12 @@ class Config {
 
 //temp
   static String userId = '7';
+  static String customerId = '';
+
+//reset password
+
+  static String resetPasswordUrl =
+      "https://shopzo.prokomers.com/wp-login.php?action=lostpassword";
 
   //customer details api
   //https://jamaa.prokomers.com/wp-json/wc/v3/customers?consumer_key=ck_21a1cfac07deb405f10313a2438da128635f8d80&consumer_secret=cs_868a244eae73cfaebf5beeaefeba2fd0d18074b6

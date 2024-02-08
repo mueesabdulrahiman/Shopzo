@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -21,7 +20,7 @@ class _MessagingState extends State<Messaging> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+   // initPlatformState();
   }
 
   @override
@@ -34,20 +33,20 @@ class _MessagingState extends State<Messaging> {
   }
 }
 
-Future<void> initPlatformState() async {
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  await OneSignal.shared.setAppId('bb0605f2-bf8d-46f8-a1df-05b49feaf5e8');
+// Future<void> initPlatformState() async {
+//   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+//   await OneSignal.shared.setAppId('bb0605f2-bf8d-46f8-a1df-05b49feaf5e8');
 
-  OneSignal.shared.setNotificationOpenedHandler((openedResult) {
-    var data = openedResult.notification.additionalData;
-    log(data.toString());
-    globals.appNavigator!.currentState!
-        .push(MaterialPageRoute(builder: (context) => NextPage()));
-  });
+//   OneSignal.shared.setNotificationOpenedHandler((openedResult) {
+//     var data = openedResult.notification.additionalData;
+//     log(data.toString());
+//     globals.appNavigator!.currentState!
+//         .push(MaterialPageRoute(builder: (context) => NextPage()));
+//   });
 
-  OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
-    event.complete(event.notification);
+//   OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
+//     event.complete(event.notification);
 
-    OneSignal.shared.getDeviceState().then((value) => print(value?.userId));
-  });
-}
+//     OneSignal.shared.getDeviceState().then((value) => print(value?.userId));
+//   });
+// }

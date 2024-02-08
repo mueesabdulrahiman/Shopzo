@@ -1,13 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class CartCounter extends StatefulWidget {
-  CartCounter({super.key, required this.numOfProducts, this.press});
+  CartCounter({
+    super.key,
+    required this.numOfProducts,
+    required this.height,
+    required this.width,
+    this.press,
+  });
   static int updatedCount = 1;
 
   int numOfProducts = 1;
   void Function()? press;
+  final double height;
+  final double width;
   @override
   State<CartCounter> createState() => _CartCounterState();
 }
@@ -20,62 +28,91 @@ class _CartCounterState extends State<CartCounter> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _textController.text = widget.numOfProducts.toString().padLeft(2, '0');
     });
-    log(widget.numOfProducts.toString());
 
-    return Row(
-      children: [
-        buildOutlineButton(
-          icon: Icons.remove,
-          press: () {
-            if (widget.numOfProducts > 1) {
-              setState(() {
-                CartCounter.updatedCount = (widget.numOfProducts--) - 1;
-              });
+    return Card(
+      color: Colors.green.shade300,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.sp),
+      ),
+      child: SizedBox(
+        height: widget.height,
+        width: widget.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildOutlineButton(
+              icon: Icons.remove,
+              press: () {
+                if (widget.numOfProducts > 1) {
+                  setState(() {
+                    CartCounter.updatedCount = (widget.numOfProducts--) - 1;
+                  });
 
-              widget.press;
-            }
-          },
-        ),
-        GestureDetector(
-          onTap: () {
-            openDialog();
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              widget.numOfProducts.toString().padLeft(2, '0'),
-              style: Theme.of(context).textTheme.headline6,
+                  widget.press;
+                }
+              },
             ),
-          ),
+            GestureDetector(
+              onTap: () {
+                openDialog();
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.sp),
+                child: Center(
+                  child: Text(
+                    widget.numOfProducts.toString().padLeft(2, '0'),
+                    style: TextStyle(
+                        color: Colors.white,
+                        //Theme.of(context).textTheme.bodySmall?.color,
+                        fontSize: 10.sp,
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            buildOutlineButton(
+                icon: Icons.add,
+                press: () {
+                  setState(() {
+                    CartCounter.updatedCount = (widget.numOfProducts++) + 1;
+                  });
+                  widget.press;
+                }),
+          ],
         ),
-        buildOutlineButton(
-            icon: Icons.add,
-            press: () {
-              setState(() {
-                CartCounter.updatedCount = (widget.numOfProducts++) + 1;
-              });
-              widget.press;
-            }),
-      ],
+      ),
     );
   }
 
   Future<String?> openDialog() => showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-            title: const Text('Update Count'),
-            content: TextField(
-              keyboardType: TextInputType.number,
-              controller: _textController,
-              autofocus: true,
-              decoration: const InputDecoration(hintText: 'Enter the quantity'),
-              style: Theme.of(context).textTheme.headline6,
+            title: Text(
+              'Update Count',
+              style: TextStyle(fontFamily: 'Lato', fontSize: 12.sp),
             ),
+            content: SizedBox(
+              width: 40.w,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                controller: _textController,
+                autofocus: true,
+                decoration:
+                    const InputDecoration(hintText: 'Enter the quantity'),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp),
+              ),
+            ),
+            actionsAlignment: MainAxisAlignment.spaceAround,
             actions: [
-              TextButton(onPressed: submit, child: const Text('Submit')),
+              TextButton(
+                  onPressed: submit,
+                  child: Text('Submit',
+                      style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp))),
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'))
+                  child: Text('Cancel',
+                      style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp)))
             ],
           ));
 
@@ -94,18 +131,14 @@ class _CartCounterState extends State<CartCounter> {
 Widget buildOutlineButton(
     {required IconData icon, required VoidCallback press}) {
   return SizedBox(
-    width: 38,
-    height: 30,
-    child: OutlinedButton(
-      style: ButtonStyle(
-          side: MaterialStateProperty.all(
-              const BorderSide(color: Colors.blue, width: 1)),
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ))),
+    width: 8.w,
+    child: TextButton(
       onPressed: press,
-      child: Icon(icon),
+      child: Icon(
+        icon,
+        size: 12.sp,
+        color: Colors.white,
+      ),
     ),
   );
 }

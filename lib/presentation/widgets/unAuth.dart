@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shop_x/presentation/main_page.dart';
+import 'package:sizer/sizer.dart';
 import 'package:shop_x/presentation/authentication_page/login_page.dart';
 
 class UnAuthWidget extends StatelessWidget {
@@ -12,40 +14,44 @@ class UnAuthWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            height: 100,
+            height: 70.sp,
             decoration: const BoxDecoration(
               color: Colors.green,
               shape: BoxShape.circle,
             ),
-            child: const Center(
+            child: Center(
                 child: Icon(
               Icons.lock,
-              size: 50.0,
+              size: 30.sp,
               color: Colors.white,
             )),
           ),
-          const SizedBox(
-            height: 10.0,
+          SizedBox(
+            height: 1.h,
           ),
-          const Text(
+          Text(
             'You must Sign-In to access this section',
-            style: TextStyle(color: Colors.green, fontSize: 20.0),
+            style: TextStyle(
+                color: Colors.green, fontSize: 15.sp, fontFamily: 'Lato'),
           ),
-          const SizedBox(
-            height: 5.0,
+          SizedBox(
+            height: 1.h,
           ),
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith(
                 (states) => Colors.green,
               ),
-              minimumSize: MaterialStateProperty.all(const Size(100, 40)),
+              minimumSize: MaterialStateProperty.all(Size(25.w, 5.h)),
             ),
-            child: const Text('Login'),
+            child: Text(
+              'Login',
+              style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp),
+            ),
             onPressed: () {
+              
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => const SignIn()),
-              );
+                  MaterialPageRoute(builder: (ctx) => const SignIn()));
             },
           ),
         ],

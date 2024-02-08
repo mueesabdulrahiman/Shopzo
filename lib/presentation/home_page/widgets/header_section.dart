@@ -1,12 +1,12 @@
-//import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_x/presentation/widgets/temp_data.dart';
+import 'package:sizer/sizer.dart';
 
 class TopSection extends StatelessWidget {
   const TopSection({
-    Key? key,
+    super.key,
     required this.size,
-  }) : super(key: key);
+  });
 
   final Size size;
 
@@ -15,29 +15,16 @@ class TopSection extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      padding: const EdgeInsets.only(top: 5, left: 5),
+      padding: EdgeInsets.only(top: 0.5.h, left: 2.w),
       scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) => bannerImages[index],
+      itemBuilder: (context, index) => 
+      bannerImages[index],
       itemCount: bannerImages.length,
       separatorBuilder: (context, index) => SizedBox(
-        width: size.width * 0.03,
+        width: 2.w,
       ),
     );
   }
 
-  // Widget imageCarousel(BuildContext context) {
-  //   return Container(
-  //     width: size.width * 0.7,
-  //     child: Carousel(
-  //       overlayShadow: false,
-  //       borderRadius: true,
-  //       boxFit: BoxFit.none,
-  //       autoplay: true,
-  //       dotSize: 3.0,
-  //       images: bannerImages,
-      
-  //     )
-
-  //   );
-  // }
+ 
 }

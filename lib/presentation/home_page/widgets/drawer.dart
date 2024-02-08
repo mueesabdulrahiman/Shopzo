@@ -14,9 +14,16 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       width: 250,
-      child: ListView(
+      child: Column(
         children: [
-          const DrawerHeader(child: Text('')),
+          DrawerHeader(
+            child: Text('hello'),
+            //      Image.asset(
+            //   'assets/images/shopzo-app.png',
+            //   height: 150,
+            //   width: 150,
+            // )
+          ),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -61,7 +68,7 @@ class AppDrawer extends StatelessWidget {
               //sharedPref.remove(SAVE_KEY_NAME);
               // final prefs = await SharedPreferences.getInstance();
               // prefs.remove('login_details');
-             await  SharedPrefService.logout();
+              await SharedPrefService.logout();
               // Navigator.of(context).pushAndRemoveUntil(
               //     MaterialPageRoute(builder: (ctx) => const SignIn()),
               //     (route) => false);

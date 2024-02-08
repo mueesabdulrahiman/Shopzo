@@ -10,13 +10,14 @@ abstract class CartPageState extends Equatable {
 class CartPageInitial extends CartPageState {}
 
 
+// ignore: must_be_immutable
 class CartPageAddProduct extends CartPageState {
   final List<CartCardWidget> addProduct;
-  bool? newProduct;
+  bool newProduct;
 
   CartPageAddProduct({
     this.addProduct = const [],
-    this.newProduct,
+    required this.newProduct,
   });
 }
 

@@ -3,6 +3,7 @@ import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/order_details_model.dart';
 import 'package:shop_x/presentation/widgets/checkpoints.dart';
 import 'package:shop_x/utils/generic.dart';
+import 'package:sizer/sizer.dart';
 
 class OrderDetailsPage extends BasePage {
   final int orderId;
@@ -32,7 +33,7 @@ class _OrderDetailsPageState extends BasePageState<OrderDetailsPage> {
           return orderDetailsUI(snapshot.data!);
         }
         return SizedBox(
-          height: MediaQuery.of(context).size.height, 
+          height: MediaQuery.of(context).size.height,
           child: const Center(child: CircularProgressIndicator()),
         );
       },
@@ -72,81 +73,75 @@ class _OrderDetailsPageState extends BasePageState<OrderDetailsPage> {
   Widget orderDetailsUI(OrderDetailsModel model) {
     getCurrentStatus(model.orderStatus!);
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(8.sp),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "#${model.orderId}",
-            style: Theme.of(context).textTheme.labelHeading,
+          Text("#${model.orderId}", style: orderDetailsPageHeadingStyle()),
+          Text(model.orderDate.toString(), style: orderDetailsPageTextStyle()),
+          SizedBox(
+            height: 2.h,
           ),
-          Text(
-            model.orderDate.toString(),
-            style: Theme.of(context).textTheme.labelText,
+          Text('Delivered To', style: orderDetailsPageHeadingStyle()),
+          Text(model.shipping!.address1 ?? 'Nil',
+              style: orderDetailsPageTextStyle()),
+          Text(model.shipping!.city ?? 'Nil',
+              style: orderDetailsPageTextStyle()),
+          SizedBox(
+            height: 2.h,
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            'Delivered To',
-            style: Theme.of(context).textTheme.labelHeading,
-          ),
-          Text(
-            model.shipping!.address1 ?? 'Nil',
-            style: Theme.of(context).textTheme.labelText,
-          ),
-          //Text(model.shipping!.address2!),
-          Text(
-            model.shipping!.city ?? 'Nil',
-            style: Theme.of(context).textTheme.labelText,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            'Payment Method',
-            style: Theme.of(context).textTheme.labelHeading,
-          ),
-          Text(
-            model.paymentMethod ?? 'Nil',
-            style: Theme.of(context).textTheme.labelText,
-          ),
+          Text('Payment Method', style: orderDetailsPageHeadingStyle()),
+          Text(model.paymentMethod ?? 'Nil',
+              style: orderDetailsPageTextStyle()),
           const Divider(
             color: Colors.grey,
           ),
-          const SizedBox(
-            height: 5.0,
+          SizedBox(
+            height: 0.5.h,
           ),
           CheckPoints(
               checkTill: statusPoint,
               checkPoints: const ['Processing', 'Shipping', 'Delivered'],
               checkPointsFillColor: Colors.green),
-          const Divider(
-            color: Colors.grey,
-          ),
+          const Divider(color: Colors.grey),
           _listOrderItems(model),
-          const Divider(
-            color: Colors.grey,
-          ),
+          const Divider(color: Colors.grey),
           _itemTotal(
             "Item Total",
             "${model.itemTotalAmount}",
-            textStyle: Theme.of(context).textTheme.itemTotalText,
           ),
           _itemTotal(
             'Shipping Charges',
             "${model.shippingTotal}",
-            textStyle: Theme.of(context).textTheme.itemTotalText,
           ),
           _itemTotal(
             'Paid',
             '${model.totalAmount}',
-            textStyle: Theme.of(context).textTheme.itemTotalPaidText,
           )
         ],
       ),
     );
+  }
+
+  TextStyle orderDetailsPageTextStyle() {
+    return TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.bold,
+        fontSize: 10.sp,
+        color: Theme.of(context).textTheme.bodyLarge?.color
+        // Colors.black
+        );
+  }
+
+  TextStyle orderDetailsPageHeadingStyle() {
+    return TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.bold,
+        fontSize: 11.sp,
+        color: Theme.of(context).primaryColor
+        //Colors.green
+        );
   }
 
   Widget _listOrderItems(OrderDetailsModel model) {
@@ -162,31 +157,55 @@ class _OrderDetailsPageState extends BasePageState<OrderDetailsPage> {
   Widget _productItems(LineItems product) {
     return ListTile(
       dense: true,
-      contentPadding: const EdgeInsets.all(2),
-      onTap: () {},
+      contentPadding: EdgeInsets.all(1.sp),
       title: Text(
         product.productName ?? 'Nil',
-        style: Theme.of(context).textTheme.productItemText,
+        style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontFamily: 'Lato',
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w300),
       ),
       subtitle: Padding(
         padding: const EdgeInsets.all(1),
-        child: Text('Qty: ${product.quantity}'),
+        child: Text('Qty: ${product.quantity}',
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontFamily: 'Lato',
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w300)),
       ),
-      trailing: Text("Rs ${product.totalCost}"),
+      trailing: Text("Rs ${product.totalCost}",
+          style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontFamily: 'Lato',
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w300)),
     );
   }
 
-  Widget _itemTotal(String label, String value,
-      {required TextStyle textStyle}) {
+  Widget _itemTotal(
+    String label,
+    String value,
+  ) {
     return ListTile(
       dense: true,
       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
       contentPadding: const EdgeInsets.fromLTRB(2, -10, 2, -10),
       title: Text(
         label,
-        style: textStyle,
+        style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontFamily: 'Lato',
+            fontSize: 10.sp),
       ),
-      trailing: Text("Rs $value"),
+      trailing: Text(
+        "Rs $value",
+        style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontFamily: 'Lato',
+            fontSize: 10.sp),
+      ),
     );
   }
 
@@ -210,25 +229,32 @@ class _OrderDetailsPageState extends BasePageState<OrderDetailsPage> {
 extension CustomStyles on TextTheme {
   TextStyle get labelHeading => const TextStyle(
       fontSize: 16,
+      fontFamily: 'Lato',
       color: Color.fromARGB(255, 228, 31, 17),
       fontWeight: FontWeight.bold);
 
   TextStyle get labelText => const TextStyle(
         fontSize: 14,
+        fontFamily: 'Lato',
         color: Colors.black,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get productItemText => const TextStyle(
-        fontSize: 14,
+  TextStyle get productItemText => TextStyle(
+        fontSize: 10.sp,
+        fontFamily: 'Lato',
         color: Colors.black,
         fontWeight: FontWeight.w600,
       );
-  TextStyle get itemTotalText => const TextStyle(
-      fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600);
+  TextStyle get itemTotalText => TextStyle(
+      fontSize: 10.sp,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Lato');
 
-  TextStyle get itemTotalPaidText => const TextStyle(
-        fontSize: 16,
+  TextStyle get itemTotalPaidText => TextStyle(
+        fontSize: 10.sp,
+        fontFamily: 'Lato',
         color: Colors.black,
         fontWeight: FontWeight.bold,
       );

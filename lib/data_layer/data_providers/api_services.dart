@@ -2,64 +2,145 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shop_x/config.dart';
 import 'package:shop_x/data_layer/models/categories.dart';
 import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/data_layer/models/login_model.dart';
 import 'package:shop_x/data_layer/models/order_details_model.dart';
 import 'package:shop_x/data_layer/models/orders.dart';
-import 'package:shop_x/data_layer/models/samples/category.dart';
 import 'package:shop_x/data_layer/models/samples/sample.dart';
-import 'package:shop_x/data_layer/models/userDetailsModel.dart';
+import 'package:shop_x/data_layer/models/user_details_model.dart';
+import 'package:shop_x/utils/api_exception.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 
 //registration
 
 class ApiServices {
-  Future<bool> createCustomer(Customer model) async {
+  ApiException apiException = ApiException();
+  Future<bool> createCustomer(Customer model, BuildContext context) async {
+    late bool res;
+
     var authToken =
         base64.encode(utf8.encode('${Config.key}:${Config.secret}'));
-
-    late bool res;
     try {
-      final response = await Dio(BaseOptions(
-        headers: {
-          HttpHeaders.authorizationHeader: 'Basic $authToken',
-        },
-      )).post(
-        Config.url + Config.customerUrl,
-        data: model.toJson(),
-      );
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      final response = await Dio(BaseOptions(headers: {
+        HttpHeaders.authorizationHeader: 'Basic $authToken',
+      })).post(Config.url + Config.customerUrl, data: model.toJson());
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         res = true;
-        log(response.data.toString());
+      } else {
+        throw DioException(
+            requestOptions:
+                RequestOptions(path: Config.url + Config.customerUrl),
+            response: response,
+            type: DioExceptionType.connectionError);
       }
-    } on DioError catch (e) {
-      log(e.message.toString());
+    } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
       res = false;
-    } catch (e) {
-      log(e.toString());
-      res = false;
-    }
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
     return res;
   }
 
-// get products
+  //login
+
+  Future<LoginResponseModel?> loginCustomer(
+      String username, String password, BuildContext context) async {
+    LoginResponseModel? model;
+
+    final navigator = Navigator.of(context);
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    try {
+      final response = await Dio(BaseOptions(headers: {
+        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
+      })).post(
+        Config.tokenUrl,
+        data: {
+          'username': username,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        model = LoginResponseModel.fromJson(response.data);
+
+        Config.userId = model.data!.id.toString();
+      }
+    } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
+
+      navigator.pop();
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
+    // catch (e) {
+    //   ApiException.normalExceptionMsg = e.toString();
+
+    //   navigator.pop();
+    // }
+    return model;
+  }
+
+  // lost password
+
+  // String url = "https://www.yourdomain.com/wp-login.php?action=lostpassword";
+
+// Map<String, String> headers = {
+//   'Content-Type': 'multipart/form-data; charset=UTF-8',
+//   'Accept': 'application/json',
+// };
+
+// Map<String, String> body = {
+//   'user_login': userLogin
+// };
+
+// var request = http.MultipartRequest('POST', Uri.parse(url))
+//   ..fields.addAll(body)
+//   ..headers.addAll(headers);
+
+// var response = await request.send();
+
+// // forgot password link redirect on success
+// if ([
+//   200,
+//   302
+// ].contains(response.statusCode)) {
+//   return 'success';
+// } else {
+//   print(response.statusCode);
+//   throw Exception('Failed to send. Please try again later.');
+// }
+
+  // get products
 
   Future<List<Sample>> getProducts() async {
     List<Sample> products = [];
 
     var authToken =
         base64.encode(utf8.encode('${Config.key}:${Config.secret}'));
-    final res = await Dio(BaseOptions(
+    final response = await Dio(BaseOptions(
         headers: {HttpHeaders.authorizationHeader: 'Basic $authToken'})).get(
       Config.url + Config.productsUrl,
     );
     try {
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        log(res.statusCode.toString());
+      if (response.statusCode == 200) {
+        log(response.statusCode.toString());
 
-        final results = res.data
+        final results = response.data
             .map((e) => Sample.fromJson(e as Map<String, dynamic>))
             .toList();
         for (Sample result in results) {
@@ -68,57 +149,15 @@ class ApiServices {
           }
         }
       }
-    } on DioError catch (e) {
-      log(e.message.toString());
-    } catch (e) {
-      log(res.statusCode.toString());
-    }
+    } on DioException catch (e) {
+     if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
 
     return products;
   }
 
-//login
-
-  Future<LoginResponseModel?> loginCustomer(
-      String username, String password) async {
-    log(username.toString());
-    log(password.toString());
-    LoginResponseModel? model;
-    var authToken =
-        base64.encode(utf8.encode('${Config.key}:${Config.secret}'));
-    try {
-      final res = await Dio(BaseOptions(headers: {
-        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
-      })).post(
-        Config.tokenUrl,
-        data: {
-          'username': username,
-          'password': password,
-        },
-      );
-      log(res.statusCode.toString());
-      log(res.data.toString());
-
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        log(res.statusCode.toString());
-        model = LoginResponseModel.fromJson(res.data);
-
-        log(model.message ?? 'nil');
-        Config.userId = model.data!.id.toString();
-        log(Config.userId.toString());
-      } else {
-        log(res.toString());
-      }
-      log(res.data.toString());
-    } on DioError catch (e) {
-      log(e.message);
-    }
-    // catch (e) {
-    //   log(e.toString());
-    //   log('hi');
-    // }
-    return model;
-  }
 // get categories
 
   Future<List<Categories>> getCategories() async {
@@ -132,18 +171,17 @@ class ApiServices {
         categories =
             (response.data as List).map((e) => Categories.fromJson(e)).toList();
       }
-    } on DioError catch (e) {
-      log(e.response.toString());
-    } catch (e) {
-      log(e.toString());
-    }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
     return categories;
   }
 
 // create order
 
   Future<bool> createOrder(OrderModel model) async {
-    //log(model.toJson().toString());
     bool iscreated = false;
 
     var authToken =
@@ -158,11 +196,11 @@ class ApiServices {
       if (res.statusCode == 200 || res.statusCode == 201) {
         iscreated = true;
       }
-    } on DioError catch (e) {
-      log(e.error.toString());
-    } catch (e) {
-      log(e.toString());
-    }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
     return iscreated;
   }
 
@@ -173,7 +211,7 @@ class ApiServices {
     int? userId;
 
     try {
-      final loginResponseModel = await SharedPrefService.loginDetails();
+      final loginResponseModel = await SharedPrefService.getLoginDetails();
       if (loginResponseModel?.data != null) {
         userId = loginResponseModel!.data!.id;
 
@@ -192,8 +230,8 @@ class ApiServices {
           }
         }
       }
-    } on DioError catch (e) {
-      log(e.message.toString());
+    } on DioException catch (e) {
+      log('Error: ${e.message}');
     }
     return data;
   }
@@ -213,8 +251,8 @@ class ApiServices {
         log("details: $data");
         log("${data.lineItems}");
       }
-    } on DioError catch (e) {
-      log(e.message.toString());
+    } on DioException catch (e) {
+      log('Error: ${e.message}');
     }
     return data;
   }
@@ -224,10 +262,9 @@ class ApiServices {
   Future<CustomerDetailsModel?> getCustomerDetails() async {
     CustomerDetailsModel? model;
     int? userId;
-    //model!.id = int.parse(id);
 
     try {
-      final loginResponseModel = await SharedPrefService.loginDetails();
+      final loginResponseModel = await SharedPrefService.getLoginDetails();
       if (loginResponseModel?.data != null) {
         userId = loginResponseModel!.data!.id!;
         log("userId: $userId");
@@ -237,12 +274,78 @@ class ApiServices {
           model = CustomerDetailsModel.fromJson(res.data);
         }
       }
-    } on DioError catch (e) {
-      log(e.response.toString());
-    } catch (e) {
-      log(e.toString());
-    }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
     return model;
+  }
+
+  // update customer details
+
+  Future<CustomerDetailsModel?> updateCustomerDetails(
+      CustomerDetailsModel customerModel) async {
+    CustomerDetailsModel? updatedCustomer;
+    int? userId;
+
+    try {
+      final loginResponseModel = await SharedPrefService.getLoginDetails();
+      if (loginResponseModel?.data != null) {
+        userId = loginResponseModel!.data!.id!;
+
+        final res = await Dio().put(
+            '${Config.url}${Config.customerUrl}/$userId?consumer_key=${Config.key}&consumer_secret=${Config.secret}',
+            data: {
+              'first_name': customerModel.firstName,
+              'last_name': customerModel.lastName,
+              'shipping': customerModel.shipping?.toJson(),
+              'billing': customerModel.billing?.toJson()
+            });
+        if (res.statusCode == 200 || res.statusCode == 201) {
+          updatedCustomer = CustomerDetailsModel.fromJson(res.data);
+        }
+      }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    } 
+    return updatedCustomer;
+  }
+
+  // delete customer
+
+  Future<bool> deleteCustomer() async {
+    CustomerDetailsModel? deletedCustomer;
+    try {
+      String credentials =
+          base64Encode(utf8.encode('${Config.key}:${Config.secret}'));
+
+      final loginResponseModel = await SharedPrefService.getLoginDetails();
+      if (loginResponseModel?.data != null) {
+        final userId = loginResponseModel!.data!.id;
+        final result = await Dio(BaseOptions(
+          headers: {
+            'Authorization': 'Basic $credentials',
+            'Content-Type': 'application/json',
+          },
+        )).delete('${Config.url}${Config.customerUrl}/$userId?force=true');
+        if (result.statusCode == 200) {
+          deletedCustomer = CustomerDetailsModel.fromJson(result.data);
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+     if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
   }
 
   // post customer playerid for notification details
@@ -269,16 +372,14 @@ class ApiServices {
               }
             ]
           });
-      log('**********************************');
-      log(" statuscode :${response.statusCode}");
-      log('**********************************');
+    
       if (response.statusCode == 200 || response.statusCode == 201) {
         flag = true;
       }
-    } on DioError catch (e) {
-      log(e.message.toString());
-    } catch (e) {
-      log(e.toString());
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
 
     return flag;

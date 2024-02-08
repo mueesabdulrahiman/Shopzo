@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/data_layer/models/login_model.dart';
 
 class SharedPrefService {
@@ -9,7 +10,7 @@ class SharedPrefService {
     return prefs.getString('login_details') != null ? true : false;
   }
 
-  static Future<LoginResponseModel?> loginDetails() async {
+  static Future<LoginResponseModel?> getLoginDetails() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('login_details') != null
         ? LoginResponseModel.fromJson(
@@ -17,14 +18,20 @@ class SharedPrefService {
         : null;
   }
 
-  static Future<void>setLoginDetails(LoginResponseModel? loginDetails) async {
+  static Future<void> setLoginDetails(LoginResponseModel loginDetails) async {
     final prefs = await SharedPreferences.getInstance();
-     prefs.setString('login_details', jsonEncode(loginDetails?.toJson()));
+    // if(loginDetails is LoginResponseModel){
+       await prefs.setString('login_details', jsonEncode(loginDetails.toJson()));
+    // }else if(loginDetails is Customer) {
+    //    await prefs.setString('login_details', jsonEncode(loginDetails.toJson()));
+    // }
+   
   }
 
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-     //await setLoginDetails(null);
-    prefs.remove('login_details');
+    //await setLoginDetails(null);
+    await prefs.remove('login_details');
+    // prefs.clear();
   }
 }

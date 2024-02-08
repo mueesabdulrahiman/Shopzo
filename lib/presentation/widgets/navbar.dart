@@ -13,12 +13,14 @@ class Navbar extends StatelessWidget {
       valueListenable: Navbar.notifier,
       builder: (context, value, _) {
         return BottomNavigationBar(
+          backgroundColor: Theme.of(context).navigationBarTheme.backgroundColor,
+          // const Color(0xFF424242), // theme.dark
           //elevation: 8.0,
           type: BottomNavigationBarType.fixed,
           landscapeLayout: BottomNavigationBarLandscapeLayout.spread,
           currentIndex: notifier.value,
           onTap: (value) => notifier.value = value,
-          selectedItemColor: Colors.black,
+          selectedItemColor: Colors.green,
           unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(
@@ -38,7 +40,9 @@ class Navbar extends StatelessWidget {
             BottomNavigationBarItem(
                 icon: Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Icon(Icons.arrow_right_alt_sharp),
+                  child: Icon(
+                    Icons.receipt,
+                  ),
                 ),
                 label: ''),
             BottomNavigationBarItem(

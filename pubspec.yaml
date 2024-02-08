@@ -32,28 +32,34 @@ dependencies:
   bloc: ^8.1.0
   cached_network_image: ^3.2.3
   cupertino_icons: ^1.0.2
-  dio: ^4.0.6
+  device_preview: ^1.1.0
+  dio: ^5.4.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
+  fluttertoast: ^8.2.4
   font_awesome_flutter: ^10.2.1
-  google_fonts: ^3.0.1
+  google_fonts: ^6.1.0
   json_annotation: ^4.7.0
   json_serializable: ^6.5.4
   onesignal_flutter: ^3.5.0
+  rename: ^3.0.1
   shared_preferences: ^2.0.18
+  sizer: ^2.0.15
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   build_runner: ^2.3.2
-  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
 
-# flutter_icons:
-#   android: "laucher_icon"
-#   ios: true
-#   image_path: "assets/flutter-icon.png"
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/shopzo-app.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -65,7 +71,14 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/images/
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-Regular.ttf
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

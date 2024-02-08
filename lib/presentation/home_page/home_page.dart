@@ -1,15 +1,9 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_event.dart';
-import 'package:shop_x/messaging.dart';
-import 'package:shop_x/presentation/cart_page/cart_page.dart';
 import 'package:shop_x/presentation/home_page/product_details_page.dart';
 import 'package:shop_x/presentation/home_page/widgets/bottom_section.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
@@ -18,6 +12,7 @@ import 'package:shop_x/presentation/home_page/widgets/header_section.dart';
 import 'package:shop_x/presentation/home_page/widgets/middle_section.dart';
 import 'package:shop_x/presentation/home_page/widgets/serach_widget.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
+import 'package:sizer/sizer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,44 +21,52 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeSize = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // BlocProvider.of<HomePageBloc>(context).add(FetchCategories());
-      // BlocProvider.of<HomePageBloc>(context).add(FetchProducts());
-      BlocProvider.of<HomePageBloc>(context).add(LoadHomeData());
+      
+     
     });
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: ThemeData().iconTheme,
-        backgroundColor: Colors.white,
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
         elevation: 0,
+        leading: Padding(
+          padding: EdgeInsets.all(5.sp),
+          child: Image.asset(
+            'assets/images/shopzo-app.png',
+          ),
+        ),
         actions: [
           searchWidget(),
           SizedBox(
-            width: homeSize.width * 0.05,
+            width: 5.w,
           ),
           GestureDetector(
             onTap: () => Navbar.notifier.value = 1,
-            child: const Icon(
+            child: Icon(
               Icons.shopping_basket_outlined,
+              size: 17.sp,
             ),
           ),
           SizedBox(
-            width: homeSize.width * 0.05,
+            width: 5.w,
           ),
         ],
       ),
-      drawer: const AppDrawer(),
       body: BlocBuilder<HomePageBloc, HomePageState>(
         builder: (context, state) {
           if (state is SearchedProducts && state.searchProducts.isNotEmpty) {
             final products = state.searchProducts;
+            final device = SizerUtil.deviceType == DeviceType.mobile ? 2 : 3;
 
             return GridView.count(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
-              crossAxisCount: 2,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
+              padding: EdgeInsets.symmetric(horizontal: 5.sp),
+              crossAxisCount: device,
+              mainAxisSpacing: 1.w,
+              crossAxisSpacing: 1.w,
               childAspectRatio: 1 / 1.8,
               children: List.generate(products.length, (index) {
                 final data = products[index];
@@ -77,7 +80,6 @@ class HomePage extends StatelessWidget {
                 final tag = data.tags;
                 final category = data.categories;
                 final id = data.id;
-                bool flag = data.flag;
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -94,91 +96,137 @@ class HomePage extends StatelessWidget {
                               id: id.toString(),
                             )));
                   },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Hero(
-                        transitionOnUserGestures: true,
-                        tag: name,
-                        child: CachedNetworkImage(
-                          imageUrl: data.images!.first.src!,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.contain,
-                                    scale: 1)),
-                          ),
-                        ),
-                      ),
-                      ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(data.name!,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700),
-                                )),
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: double.tryParse(realPrice).toString(),
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.lineThrough)),
-                              const WidgetSpan(
-                                  child: SizedBox(
-                                width: 5,
-                              )),
-                              TextSpan(
-                                  text: double.tryParse(salePrice).toString(),
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16))
-                            ])),
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CartCounter(numOfProducts: 01),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  BlocProvider.of<CartPageCubit>(context)
-                                      .addToCart(context,
-                                          name: name,
-                                          salePrice: salePrice,
-                                          image: image.first.src!,
-                                          count: CartCounter.updatedCount,
-                                          id: id!);
-                                },
-                                child: flag
-                                    ? const Text('View Cart')
-                                    : const Text('Add To Cart'),
+                  child: Card(
+                    color: Theme.of(context).cardColor,
+                    clipBehavior: Clip.hardEdge,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.sp)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Hero(
+                            tag: name,
+                            child: CachedNetworkImage(
+                              imageUrl: data.images!.first.src!,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitHeight,
+                                        scale: 1)),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.sp, vertical: 8.sp),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data.name!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Lato',
+                                  ),
+                                ),
+                                const Spacer(
+                                  flex: 1,
+                                ),
+                                RichText(
+                                    text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text: double.tryParse(realPrice)
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Lato',
+                                            fontSize: 12.sp,
+                                            decoration:
+                                                TextDecoration.lineThrough)),
+                                    WidgetSpan(
+                                        child: SizedBox(
+                                      width: 2.0.w,
+                                    )),
+                                    TextSpan(
+                                        text: '₹$salePrice',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Lato',
+                                            fontSize: 12.sp))
+                                  ],
+                                )),
+                                const Spacer(
+                                  flex: 2,
+                                ),
+                                CartCounter(
+                                  numOfProducts: 01,
+                                  height: 4.h,
+                                  width: double.infinity,
+                                ),
+                                const Spacer(
+                                  flex: 2,
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      BlocProvider.of<CartPageCubit>(context)
+                                          .addToCart(context,
+                                              name: name,
+                                              salePrice: salePrice,
+                                              image: image.first.src!,
+                                              count: CartCounter.updatedCount,
+                                              id: id!);
+                                    },
+                                    child: Text(
+                                      'Add To Cart',
+                                      style: TextStyle(
+                                        fontFamily: 'Lato',
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),
             );
           } else if (state is SearchedProducts &&
               state.searchProducts.isEmpty) {
-            return const Center(
-              child: Text('No Products'),
+            return Center(
+              child: Text(
+                'No Products',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                    fontSize: 10.sp,
+                    fontFamily: 'Lato'),
+              ),
             );
           } else if (state is SearchActive) {
             return Container();
@@ -192,58 +240,64 @@ class HomePage extends StatelessWidget {
                 return ListView(
                   children: [
                     SizedBox(
-                      height: homeSize.width * 0.38,
+                      height: 20.h,
                       child: TopSection(size: homeSize),
                     ),
-                    const Divider(
-                      thickness: 6.0,
+                    Divider(
+                      thickness: 1.h,
                     ),
                     SizedBox(
-                      height: homeSize.width * 0.02,
+                      height: 1.h,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8.0.sp),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Categories',
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'Lato',
+                              fontSize: 13.sp,
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
                               BottomSection.clickedCategoryProducts.value = [];
                             },
-                            child: const Text(
+                            child: Text(
                               'Show all',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'Lato',
+                                fontSize: 10.sp,
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(height: 1.h),
                     SizedBox(
-                      height: homeSize.width * 0.05,
-                    ),
-                    SizedBox(
-                      height: homeSize.width * 0.18,
+                      height: 11.h,
                       child: MiddleSection(
                         size: homeSize,
                         categories: currentState.categories,
                       ),
                     ),
                     SizedBox(
-                      height: homeSize.width * 0.02,
+                      height: 1.h,
                     ),
-                    const Divider(
-                      thickness: 6.0,
+                    Divider(
+                      thickness: 6.0.sp,
                     ),
                     BottomSection(
                       products: currentState.products,

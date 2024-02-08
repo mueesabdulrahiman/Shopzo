@@ -16,7 +16,9 @@ class Customer {
       'last_name': lastName,
       'password': password,
       'username': email,
-      'shipping': shipping?.toJson(),
+      'shipping': 
+      //shipping !=null ? shipping!.toJson() : null,
+      shipping?.toJson(),
       'billing': billing?.toJson(),
     };
   }

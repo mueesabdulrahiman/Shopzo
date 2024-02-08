@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class LoginResponseModel {
   bool? success;
   int? statusCode;
@@ -6,20 +8,17 @@ class LoginResponseModel {
   Data? data;
 
   LoginResponseModel(
-      { this.success,
-       this.statusCode,
-       this.code,
-       this.message,
-       this.data});
+      {this.success, this.statusCode, this.code, this.message, this.data});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    log('statuscode:${json['statusCode']}');
     return LoginResponseModel(
-        success: json['success'],
-        statusCode: json['statusCode'],
-        code: json['code'],
-        message: json['message'],
-        data: json['data'] != null? Data.fromJson(json['data']) : null,
-        );
+      success: json['success'],
+      statusCode: json['statusCode'],
+      code: json['code'],
+      message: json['message'],
+      data: json['data'] != null ? Data.fromJson(json['data']) : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -28,7 +27,10 @@ class LoginResponseModel {
     res['statusCode'] = statusCode;
     res['code'] = code;
     res['message'] = message;
-    res['data'] =  data != null ? data!.toJson(): null;
+    if (data != null) {
+      res['data'] = data!.toJson();
+    }
+    //res['data'] = data != null ? data!.toJson() : null;
     return res;
   }
 }
@@ -43,16 +45,16 @@ class Data {
   String? displayName;
 
   Data({
-     this.token,
-     this.id,
-     this.email,
-     this.firstName,
-     this.lastName,
-     this.niceName,
-     this.displayName,
+    this.token,
+    this.id,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.niceName,
+    this.displayName,
   });
 
-factory Data.fromJson(Map<String, dynamic> json) {
+  factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
         token: json['token'],
         id: json['id'],

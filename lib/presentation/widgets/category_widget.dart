@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_x/presentation/home_page/home_page.dart';
+import 'package:sizer/sizer.dart';
 
 class CategoryIcon extends StatelessWidget {
   const CategoryIcon({
@@ -14,19 +15,23 @@ class CategoryIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of
     return Column(
       children: [
         Image.network(
           icon,
           fit: BoxFit.scaleDown,
-          width: 40,
-          height: 40,
+          width: 10.w,
+          height: 7.h,
         ),
-        SizedBox(
-          height: size.height * 0.01,
+        SizedBox(height: 1.h),
+        Text(
+          text,
+          style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.w600,
+              fontSize: 10.sp),
         ),
-        Text(text),
       ],
     );
   }

@@ -22,8 +22,8 @@ class SearchedProducts extends HomePageState {
 }
 
 class ProductsListError extends HomePageState {
-  final error;
-  ProductsListError({this.error});
+  final String error;
+  ProductsListError({required this.error});
 }
 
 class ProductSearching extends HomePageState {
@@ -33,15 +33,18 @@ class ProductSearching extends HomePageState {
 
 class SearchActive extends HomePageState {}
 
-class SearchLoading extends HomePageState {}
-
 class SearchInactive extends HomePageState {}
+
+class SearchLoading extends HomePageState {}
 
 class CategoriesLoading extends HomePageState {}
 
 class HomeDataLoaded extends HomePageState {
   final List<Categories> categories;
   final List<Sample> products;
-   final List<Sample>categoryProducts;
-  HomeDataLoaded({required this.categories, required this.products,  this.categoryProducts = const []});
+  final List<Sample> categoryProducts;
+  HomeDataLoaded(
+      {required this.categories,
+      required this.products,
+      this.categoryProducts = const []});
 }

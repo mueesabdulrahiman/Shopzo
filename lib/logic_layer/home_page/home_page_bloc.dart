@@ -89,7 +89,6 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<SearchProducts>((event, emit) {
       log('hasSearchClicked:$hasSearchClicked');
 
-      final currentState = state;
 
       if (event.clearQuery == true) {
         log(event.clearQuery.toString());

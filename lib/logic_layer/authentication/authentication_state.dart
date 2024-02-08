@@ -15,14 +15,33 @@ class RegistrationAuthenticationLoaded extends AuthenticationState {
 }
 
 class LogInAuthenticationLoaded extends AuthenticationState {
-  LoginResponseModel? loginModel;
-  LogInAuthenticationLoaded({this.loginModel});
-}
-class Loading extends AuthenticationState{
-  
+  final LoginResponseModel loginModel;
+  const LogInAuthenticationLoaded({required this.loginModel});
 }
 
+class Loading extends AuthenticationState {}
+
 class AuthenticationError extends AuthenticationState {
-  final String error;
-  const AuthenticationError({required this.error});
+  const AuthenticationError();
+}
+
+// ignore: must_be_immutable
+class AuthenticationPasswordVisibility extends AuthenticationState {
+  bool passwordVisible;
+  AuthenticationPasswordVisibility({this.passwordVisible = false});
+}
+
+class AuthenticatedCustomerDetails extends AuthenticationState {
+  final CustomerDetailsModel customerModel;
+  const AuthenticatedCustomerDetails({required this.customerModel});
+}
+
+class EditCustomerAuthData extends AuthenticationState {
+  final bool didEdit;
+  const EditCustomerAuthData({required this.didEdit});
+}
+
+class DeleteCustomer extends AuthenticationState {
+  final bool result;
+  const DeleteCustomer({required this.result});
 }
