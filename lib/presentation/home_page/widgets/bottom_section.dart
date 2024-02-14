@@ -90,8 +90,7 @@ _buildProductList(BuildContext context, List<Sample> products) {
                   child: CachedNetworkImage(
                     imageUrl: data.images!.first.src!,
                     imageBuilder: (context, imageProvider) => Container(
-                      // height: 200,
-                      // height: double.infinity / 2,
+                     
 
                       decoration: BoxDecoration(
                           color: Colors.white,

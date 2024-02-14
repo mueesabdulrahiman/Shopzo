@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
 import 'package:shop_x/logic_layer/theme/theme_bloc.dart';
+import 'package:shop_x/presentation/account_page/widgets/custom_dialog_box.dart';
+import 'package:shop_x/presentation/account_page/widgets/toast_widget.dart';
+import 'package:shop_x/presentation/widgets/navbar.dart';
+import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingPage extends StatefulWidget {
@@ -10,12 +15,15 @@ class SettingPage extends StatefulWidget {
   SettingPageState createState() => SettingPageState();
 }
 
+final settingPageKey = GlobalKey<ScaffoldState>();
+
 class SettingPageState extends State<SettingPage> {
   bool _showNotifications = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: settingPageKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
@@ -28,7 +36,7 @@ class SettingPageState extends State<SettingPage> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.sp),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,6 +72,34 @@ class SettingPageState extends State<SettingPage> {
                 },
               ),
             ),
+            ListTile(
+                title: Text(
+                  'Delete account',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 13.sp,
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.w500),
+                ),
+                onTap: () {
+                  showDialogBox(context, () async {
+                    final navigator = Navigator.of(context);
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(DeleteCustomerDetails());
+
+                    await Future.delayed(Duration.zero);
+                    await SharedPrefService.logout();
+                    showToastMessage('Account deleted');
+                    Navbar.notifier.value = 0;
+                    Navbar.notifier.notifyListeners();
+                    navigator.pop();
+                    Navigator.of(settingPageKey.currentContext!).pop();
+                  },
+                      title: 'Confirm?',
+                      description:
+                          'Are you sure, you want to delete your account permanently');
+                }),
           ],
         ),
       ),

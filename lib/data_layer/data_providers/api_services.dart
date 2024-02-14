@@ -44,7 +44,7 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     return res;
   }
 
@@ -86,7 +86,7 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     // catch (e) {
     //   ApiException.normalExceptionMsg = e.toString();
 
@@ -150,10 +150,10 @@ class ApiServices {
         }
       }
     } on DioException catch (e) {
-     if (kDebugMode) {
+      if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
 
     return products;
   }
@@ -175,7 +175,7 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     return categories;
   }
 
@@ -200,7 +200,7 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     return iscreated;
   }
 
@@ -278,7 +278,7 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     return model;
   }
 
@@ -310,14 +310,13 @@ class ApiServices {
       if (kDebugMode) {
         print(e.toString());
       }
-    } 
+    }
     return updatedCustomer;
   }
 
   // delete customer
 
   Future<bool> deleteCustomer() async {
-    CustomerDetailsModel? deletedCustomer;
     try {
       String credentials =
           base64Encode(utf8.encode('${Config.key}:${Config.secret}'));
@@ -331,8 +330,8 @@ class ApiServices {
             'Content-Type': 'application/json',
           },
         )).delete('${Config.url}${Config.customerUrl}/$userId?force=true');
-        if (result.statusCode == 200) {
-          deletedCustomer = CustomerDetailsModel.fromJson(result.data);
+        if (result.statusCode == 200 || result.statusCode == 201) {
+          CustomerDetailsModel.fromJson(result.data);
           return true;
         } else {
           return false;
@@ -341,8 +340,8 @@ class ApiServices {
         return false;
       }
     } on DioException catch (e) {
-     if (kDebugMode) {
-        print(e.toString());
+      if (kDebugMode) {
+        print('Error:$e');
       }
       return false;
     }
@@ -372,7 +371,7 @@ class ApiServices {
               }
             ]
           });
-    
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         flag = true;
       }

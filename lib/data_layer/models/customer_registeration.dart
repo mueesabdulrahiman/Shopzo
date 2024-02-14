@@ -15,10 +15,8 @@ class Customer {
       'first_name': firstName,
       'last_name': lastName,
       'password': password,
-      'username': email,
-      'shipping': 
-      //shipping !=null ? shipping!.toJson() : null,
-      shipping?.toJson(),
+      'username': "$firstName $lastName",
+      'shipping': shipping?.toJson(),
       'billing': billing?.toJson(),
     };
   }
@@ -52,12 +50,7 @@ class Billing {
   String? city;
   String? phone;
 
-  Billing({
-    this.company,
-    this.address,
-    this.city,
-    this.phone
-  });
+  Billing({this.company, this.address, this.city, this.phone});
 
   Map<String, dynamic> toJson() {
     return {

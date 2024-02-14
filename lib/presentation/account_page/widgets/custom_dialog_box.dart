@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:shop_x/presentation/widgets/navbar.dart';
-import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
-void showDialogBox(BuildContext context, void Function()? method,
-    {required String title, required String description}) {
+void showDialogBox(BuildContext context,
+ void Function() onPressed,
+    {required String title,
+    required String description}) {
   showDialog(
       context: context,
       builder: (ctx) {
@@ -21,15 +19,8 @@ void showDialogBox(BuildContext context, void Function()? method,
           actionsAlignment: MainAxisAlignment.spaceEvenly,
           actions: [
             TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await SharedPrefService.logout();
-                  Navbar.notifier.value = 0;
-                  Navbar.notifier.notifyListeners();
-                  final d = await SharedPrefService.isLoggedIn();
-                  method;
-                  log('shared2:$d');
-                },
+                onPressed:  onPressed,
+                
                 child: Text('Yes',
                     style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp))),
             TextButton(

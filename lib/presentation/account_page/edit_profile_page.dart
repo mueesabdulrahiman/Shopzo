@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +59,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           builder: (context, state) {
             if (state is AuthenticatedCustomerDetails) {
               final customerDetails = state.customerModel;
-              log('customer_id:${customerDetails.id}');
 
               initialCustomerData(customerDetails);
 
@@ -182,7 +180,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           updateCustomer: readOnly == false
                                               ? customerModel
                                               : null));
-                                  log("readonly:$readOnly");
                                 },
                                 child: Text(
                                   BlocProvider.of<AuthenticationBloc>(context,
@@ -204,9 +201,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return const Center(child: Text('No Data'));
             }
           },
-          // buildWhen: (pre, cur){
-          //   return pre is AuthenticatedCustomerDetails && cur is AuthenticatedCustomerDetails && pre.customerModel.
-          // },
+         
         ),
       ),
     );

@@ -233,7 +233,7 @@ class ProductDetailsPage extends StatelessWidget {
                         );
                       },
                       child: CircleAvatar(
-                        backgroundColor: Colors.green.shade300,
+                        backgroundColor: Colors.green,
                         radius: 10.w,
                         child: Center(
                           child: Icon(

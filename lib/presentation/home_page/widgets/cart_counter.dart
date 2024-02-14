@@ -30,7 +30,7 @@ class _CartCounterState extends State<CartCounter> {
     });
 
     return Card(
-      color: Colors.green.shade300,
+      color: Colors.green.shade400,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.sp),
       ),

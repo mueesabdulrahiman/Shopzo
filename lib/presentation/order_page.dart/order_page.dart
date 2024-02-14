@@ -54,7 +54,15 @@ class _OrderPageState extends State<OrderPage> {
                     if (snapshot.hasData) {
                       return _listView(context, snapshot.data!);
                     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No Orders yet'));
+                      return Center(
+                          child: Text(
+                        'No Orders yet',
+                        style: TextStyle(
+                            fontFamily: 'Lato',
+                            fontSize: 10.sp,
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color),
+                      ));
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }

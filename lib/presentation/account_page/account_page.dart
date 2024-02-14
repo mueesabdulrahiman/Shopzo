@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_x/data_layer/data_providers/api_services.dart';
-import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
 import 'package:shop_x/presentation/account_page/about_page.dart';
+import 'package:shop_x/presentation/account_page/notifications_page.dart';
 import 'package:shop_x/presentation/account_page/edit_profile_page.dart';
 import 'package:shop_x/presentation/account_page/setting_page.dart';
 import 'package:shop_x/presentation/account_page/widgets/custom_dialog_box.dart';
+import 'package:shop_x/presentation/widgets/navbar.dart';
 import 'package:shop_x/presentation/widgets/unAuth.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -20,7 +19,7 @@ class AccountPage extends StatefulWidget {
 class OptionList {
   final String optionTitle;
   final IconData optionIcon;
-  final VoidCallback onTap;
+  final void Function() onTap;
   OptionList(this.optionTitle, this.optionIcon, this.onTap);
 }
 
@@ -34,6 +33,12 @@ class _AccountPageState extends State<AccountPage> {
       OptionList('Profile', Icons.edit, () {
         Navigator.push(context,
             MaterialPageRoute(builder: (ctx) => const EditProfilePage()));
+      }),
+    );
+    optionList.add(
+      OptionList('About', Icons.info, () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (ctx) => const AboutPage()));
       }),
     );
     optionList.add(
@@ -51,18 +56,12 @@ class _AccountPageState extends State<AccountPage> {
 
     optionList.add(
       OptionList('Logout', Icons.logout, () {
-        showDialogBox(context, (){},
-            title: 'Logout?', description: 'Are you sure, you want to logout');
-      }),
-    );
-    optionList.add(
-      OptionList('Delete Account', Icons.delete, () async {
-        showDialogBox(context, (){
-          context.read<AuthenticationBloc>().add(DeleteCustomerDetails());
-        },
-            title: 'Confirm?',
-            description: 'Are you sure, you want to remove your account');
-        
+        showDialogBox(context, () async {
+          Navigator.pop(context);
+          await SharedPrefService.logout();
+          Navbar.notifier.value = 0;
+          Navbar.notifier.notifyListeners();
+        }, title: 'Logout?', description: 'Are you sure, you want to logout');
       }),
     );
   }
@@ -120,69 +119,39 @@ class _AccountPageState extends State<AccountPage> {
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.all(8.sp),
                   decoration: const BoxDecoration(),
-                  child:
-                      // Padding(
-                      //   padding: EdgeInsets.fromLTRB(6.sp, 6.sp, 6.sp, 0),
-                      //   child: Card(
-                      //     //margin: EdgeInsets.fromLTRB(6.sp, 6.sp, 6.sp, 0.sp),
-                      //     color: Theme.of(context).cardColor,
-                      //     elevation: 0,
-                      //     shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(12.sp)),
-                      //     child: Padding(
-                      //       padding: EdgeInsets.fromLTRB(0, 1.h, 0, 1.h),
-                      //       child: ListTile(
-                      //         leading: Padding(
-                      //           padding: EdgeInsets.all(0.sp),
-                      //           child: Icon(
-                      //             Icons.account_circle_sharp,
-                      //             color:
-                      //                 Theme.of(context).textTheme.bodyMedium?.color,
-                      //             //Theme.of(context).textTheme.bodyLarge?.color,
-                      //             size: 10.w,
-                      //           ),
-                      //         ),
-                      //         title: Text(
-                      //           'Hello, ${snapshot.data!.data!.displayName}',
-                      //           style: TextStyle(
-                      //               fontSize: 15.sp,
-                      //               fontWeight: FontWeight.bold,
-                      //               fontFamily: 'Lato'),
-                      //         ),
-                      //       ),
-                      //     ),
-                      Row(
-                    // mainAxisAlignment: MainAxisAlignment,
-                    children: [
-                      // CircleAvatar(
-                      //     backgroundColor: Colors.black,
-                      //     radius: 5.w,
-                      //     child: Icon(
-                      //       Icons.account_circle_sharp,
-                      //       color: Colors.white,
-                      //       size: 8.w,
-                      //     )),
-                      Icon(
-                        Icons.account_circle_sharp,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                        size: 10.w,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Hello, ${snapshot.data!.data!.displayName}',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Lato'),
-                      ),
-                    ],
+                  child: Container(
+                    padding: EdgeInsets.all(10.sp),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.all(Radius.circular(12.sp))),
+                    child: Row(
+                      children: [
+                        Icon(Icons.account_circle_sharp,
+                            color: Colors.green, size: 20.w),
+                        Expanded(
+                          child: ListTile(
+                            title: Text(
+                              '${snapshot.data!.data!.displayName}',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color,
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Lato'),
+                            ),
+                            subtitle: Text(
+                              snapshot.data?.data?.email.toString() ?? 'Nil',
+                              style: TextStyle(
+                                  color: Colors.grey.shade500, fontSize: 10.sp),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                // ),
-                //  ),
                 ListView(
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
@@ -211,18 +180,12 @@ class _AccountPageState extends State<AccountPage> {
       child: ListTile(
         leading: Padding(
           padding: EdgeInsets.all(8.sp),
-          child: Icon(
-            optionList.optionIcon,
-            size: 20.sp,
-            color: Theme.of(context).textTheme.bodyMedium?.color,
-          ),
+          child: Icon(optionList.optionIcon, size: 20.sp, color: Colors.green),
         ),
         title: Text(
           optionList.optionTitle,
           style: TextStyle(
-              color: optionList.optionTitle.contains('Delete Account')
-                  ? Colors.red
-                  : Theme.of(context).textTheme.bodyLarge?.color,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontSize: 13.sp,
               fontWeight: FontWeight.bold,
               fontFamily: 'Lato'),

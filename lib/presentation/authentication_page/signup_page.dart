@@ -33,7 +33,7 @@ class _SignUpState extends State<SignUp> {
   final _fnameController = TextEditingController();
   final _lnameController = TextEditingController();
   final _companyController = TextEditingController();
-  final _cityController = TextEditingController();
+  final _cityController = TextEditingController(text:'Kasaragod');
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
 
@@ -246,6 +246,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       FormHelper.textInputField(
                         controller: _cityController,
+                        readOnly: true,
                         hintText: 'Enter City ',
                         onValidate: (value) {
                           if (value == null || value.toString().isEmpty) {
