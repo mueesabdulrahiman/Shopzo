@@ -7,7 +7,6 @@ import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/data_layer/models/login_model.dart';
 import 'package:shop_x/data_layer/models/user_details_model.dart';
-import 'package:shop_x/presentation/account_page/widgets/toast_widget.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 
 part 'authentication_event.dart';
@@ -60,22 +59,6 @@ class AuthenticationBloc
       passwordVisible = !passwordVisible;
 
       emit(AuthenticationPasswordVisibility(passwordVisible: passwordVisible));
-    });
-
-    on<ResetPassword>((event, emit) async {
-      try {
-       final result = await apiServices.initiatePassswordReset(event.email);
-       if(result){
-        //  showToastMessage(
-        //     'Check your email. We have sent a reset password to your email address',
-        //     Colors.green);
-        emit(AuthenticationPasswordChanged());
-       }
-       
-        
-      } catch (e) {
-        emit(const AuthenticationError());
-      }
     });
 
     on<LoadCustomerDetails>((event, emit) async {

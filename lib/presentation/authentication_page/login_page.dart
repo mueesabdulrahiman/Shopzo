@@ -1,12 +1,22 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_x/config.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
+import 'package:shop_x/globals.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
+import 'package:shop_x/logic_layer/loading/loading_cubit.dart';
 import 'package:shop_x/presentation/authentication_page/signup_page.dart';
+import 'package:shop_x/presentation/home_page/home_page.dart';
 import 'package:shop_x/presentation/main_page.dart';
-import 'package:shop_x/presentation/widgets/textfield_dialogbox.dart';
+import 'package:shop_x/presentation/widgets/navbar.dart';
 import 'package:shop_x/utils/api_exception.dart';
+import 'package:shop_x/utils/email_validator.dart';
+import 'package:shop_x/utils/progressHUD.dart';
+import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -35,6 +45,15 @@ class _SignInState extends State<SignIn> {
     super.dispose();
   }
 
+  final _url = Uri.parse(Config.resetPasswordUrl);
+  _urlLaunch() async {
+    final url = Uri.parse(Config.resetPasswordUrl);
+    // Uri(scheme: 'https', host:  );
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +70,8 @@ class _SignInState extends State<SignIn> {
             duration: Duration(seconds: 2),
           ));
 
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const MainPage()),
-              (route) => false);
-        } else if (state is AuthenticationPasswordChanged) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Check your email. We have sent a reset password to your email address'),
-            duration: Duration(seconds: 3),
-          ));
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (_) => MainPage()), (route) => false);
         } else if (state is AuthenticationError) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
@@ -163,7 +174,7 @@ class _SignInState extends State<SignIn> {
                         alignment: Alignment.centerRight,
                         child: InkWell(
                           onTap: () {
-                            textfieldDialogBox(context);
+                            launchUrl(_url, mode: LaunchMode.inAppWebView);
                           },
                           child: const Text(
                             'Forgot Password?',

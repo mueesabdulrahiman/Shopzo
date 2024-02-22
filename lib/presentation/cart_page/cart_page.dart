@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/presentation/cart_page/widgets/cart_card_widget.dart';
 import 'package:shop_x/presentation/cart_page/widgets/checkout_comtainer.dart';
-import 'package:shop_x/presentation/widgets/un_auth.dart';
+import 'package:shop_x/presentation/widgets/unAuth.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 

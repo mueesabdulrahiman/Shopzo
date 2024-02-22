@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_event.dart';
 import 'package:shop_x/presentation/main_page.dart';
+import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SpalshScreenPage extends StatefulWidget {

@@ -31,10 +31,6 @@ class AuthenticationPasswordVisibility extends AuthenticationState {
   AuthenticationPasswordVisibility({this.passwordVisible = false});
 }
 
-class AuthenticationPasswordChanged extends AuthenticationState {
-  
-}
-
 class AuthenticatedCustomerDetails extends AuthenticationState {
   final CustomerDetailsModel customerModel;
   const AuthenticatedCustomerDetails({required this.customerModel});

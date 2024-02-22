@@ -24,7 +24,8 @@ class ApiException {
       case DioExceptionType.receiveTimeout:
         exceptionMsg = 'Recieve Timeout, check url or parameters are invalid';
         return exceptionMsg;
-      
+      // case DioExceptionType.unknown:
+      //  return
       default:
         exceptionMsg = 'Unknown Error, something went wrong';
         return exceptionMsg;

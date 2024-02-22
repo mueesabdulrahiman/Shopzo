@@ -12,7 +12,6 @@ import 'package:sizer/sizer.dart';
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 final productSize = MediaQuery.of(_scaffoldKey.currentContext!).size;
 
-// ignore: must_be_immutable
 class ProductDetailsPage extends StatelessWidget {
   ProductDetailsPage(
       {super.key,

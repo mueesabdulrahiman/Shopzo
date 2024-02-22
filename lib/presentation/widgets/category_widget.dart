@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shop_x/presentation/home_page/home_page.dart';
 import 'package:sizer/sizer.dart';
 
 class CategoryIcon extends StatelessWidget {
   const CategoryIcon({
-    super.key,
+    Key? key,
     required this.icon,
     required this.text,
     required this.size,
-  });
+  }) : super(key: key);
   final String icon;
   final String text;
   final Size size;

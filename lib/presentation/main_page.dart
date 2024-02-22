@@ -1,12 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
+import 'package:shop_x/next_page.dart';
 import 'package:shop_x/presentation/account_page/account_page.dart';
 import 'package:shop_x/presentation/cart_page/cart_page.dart';
 import 'package:shop_x/presentation/home_page/home_page.dart';
+import 'package:shop_x/presentation/order_page.dart/order_details_page.dart';
 import 'package:shop_x/presentation/order_page.dart/order_page.dart';
+import 'package:shop_x/presentation/order_page.dart/widgets/orderCard.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
 import 'package:shop_x/globals.dart' as globals;
+import 'package:shop_x/verify_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -43,14 +49,15 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-//onesignal in-app notification method
+// onesignal in-app notification method
 
 Future<void> initPlatformState() async {
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   await OneSignal.shared.setAppId('bb0605f2-bf8d-46f8-a1df-05b49feaf5e8');
 
   OneSignal.shared.setNotificationOpenedHandler((openedResult) {
-    openedResult.notification.additionalData;
+    var data = openedResult.notification.additionalData;
+    log(data.toString());
     globals.appNavigator!.currentState!
         .push(MaterialPageRoute(builder: (context) => const MainPage()));
   });

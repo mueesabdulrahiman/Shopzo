@@ -1,12 +1,16 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
+import 'package:shop_x/logic_layer/loading/loading_cubit.dart';
 import 'package:shop_x/presentation/authentication_page/login_page.dart';
+import 'package:shop_x/presentation/main_page.dart';
 import 'package:shop_x/utils/api_exception.dart';
 import 'package:shop_x/utils/form_helper.dart';
+import 'package:shop_x/utils/progressHUD.dart';
 import 'package:sizer/sizer.dart';
 
 class SignUp extends StatefulWidget {
