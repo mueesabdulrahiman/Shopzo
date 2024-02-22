@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_x/presentation/cart_page/cart_page.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class CartCardWidget extends StatelessWidget {
   CartCardWidget(
       {super.key,
@@ -108,24 +109,7 @@ class CartCardWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // IconButton(
-              //     onPressed: () {
-              //       _openEditButtonDialog(context);
-              //     },
-              //     icon: Icon(
-              //       Icons.edit,
-              //       color: Colors.green,
-              //       size: 20.sp,
-              //     )),
-              // IconButton(
-              //     onPressed: () {
-              //       _openCancelButtonDialog(context);
-              //     },
-              //     icon: Icon(
-              //       Icons.close,
-              //       color: Colors.green,
-              //       size: 20.sp,
-              //     )),
+             
               TextButton(
                 child: Text('Edit',
                     style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp)),

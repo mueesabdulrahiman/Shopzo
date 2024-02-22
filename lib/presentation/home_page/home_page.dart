@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/logic_layer/home_page/home_page_bloc.dart';
+import 'package:shop_x/logic_layer/home_page/home_page_event.dart';
 import 'package:shop_x/presentation/home_page/product_details_page.dart';
 import 'package:shop_x/presentation/home_page/widgets/bottom_section.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
@@ -19,8 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeSize = MediaQuery.of(context).size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      
-     
+      BlocProvider.of<HomePageBloc>(context).add(LoadHomeData());
     });
 
     return Scaffold(
@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          searchWidget(),
+          SearchWidget(),
           SizedBox(
             width: 5.w,
           ),

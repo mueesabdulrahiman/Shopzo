@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -87,43 +86,34 @@ class ApiServices {
         print(e.toString());
       }
     }
-    // catch (e) {
-    //   ApiException.normalExceptionMsg = e.toString();
 
-    //   navigator.pop();
-    // }
     return model;
   }
 
   // lost password
 
-  // String url = "https://www.yourdomain.com/wp-login.php?action=lostpassword";
-
-// Map<String, String> headers = {
-//   'Content-Type': 'multipart/form-data; charset=UTF-8',
-//   'Accept': 'application/json',
-// };
-
-// Map<String, String> body = {
-//   'user_login': userLogin
-// };
-
-// var request = http.MultipartRequest('POST', Uri.parse(url))
-//   ..fields.addAll(body)
-//   ..headers.addAll(headers);
-
-// var response = await request.send();
-
-// // forgot password link redirect on success
-// if ([
-//   200,
-//   302
-// ].contains(response.statusCode)) {
-//   return 'success';
-// } else {
-//   print(response.statusCode);
-//   throw Exception('Failed to send. Please try again later.');
-// }
+  Future<bool> initiatePassswordReset(String email) async {
+    bool passwordreset = false;
+    try {
+      final response = await Dio(BaseOptions(
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
+        },
+        validateStatus: (status) => status! >= 200 && status < 400,
+      )).post(Config.resetPasswordUrl, data: {
+        'user_login': email,
+      });
+      if ([200, 302].contains(response.statusCode)) {
+        passwordreset = true;
+      }
+    } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return passwordreset;
+  }
 
   // get products
 
@@ -133,13 +123,12 @@ class ApiServices {
     var authToken =
         base64.encode(utf8.encode('${Config.key}:${Config.secret}'));
     final response = await Dio(BaseOptions(
-        headers: {HttpHeaders.authorizationHeader: 'Basic $authToken'})).get(
+      headers: {HttpHeaders.authorizationHeader: 'Basic $authToken'},
+    )).get(
       Config.url + Config.productsUrl,
     );
     try {
       if (response.statusCode == 200) {
-        log(response.statusCode.toString());
-
         final results = response.data
             .map((e) => Sample.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -231,7 +220,7 @@ class ApiServices {
         }
       }
     } on DioException catch (e) {
-      log('Error: ${e.message}');
+      apiException.getExceptionMessages(e);
     }
     return data;
   }
@@ -248,11 +237,10 @@ class ApiServices {
               headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
       if (response.statusCode == 200 || response.statusCode == 201) {
         data = OrderDetailsModel.fromJson(response.data);
-        log("details: $data");
-        log("${data.lineItems}");
+      
       }
     } on DioException catch (e) {
-      log('Error: ${e.message}');
+      apiException.getExceptionMessages(e);
     }
     return data;
   }
@@ -267,7 +255,6 @@ class ApiServices {
       final loginResponseModel = await SharedPrefService.getLoginDetails();
       if (loginResponseModel?.data != null) {
         userId = loginResponseModel!.data!.id!;
-        log("userId: $userId");
         final res = await Dio().get(
             '${Config.url}${Config.customerUrl}/$userId?consumer_key=${Config.key}&consumer_secret=${Config.secret}');
         if (res.statusCode == 200 || res.statusCode == 201) {
@@ -275,6 +262,7 @@ class ApiServices {
         }
       }
     } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
       if (kDebugMode) {
         print(e.toString());
       }
@@ -307,6 +295,7 @@ class ApiServices {
         }
       }
     } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
       if (kDebugMode) {
         print(e.toString());
       }
@@ -340,6 +329,7 @@ class ApiServices {
         return false;
       }
     } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
       if (kDebugMode) {
         print('Error:$e');
       }
@@ -376,6 +366,7 @@ class ApiServices {
         flag = true;
       }
     } on DioException catch (e) {
+      apiException.getExceptionMessages(e);
       if (kDebugMode) {
         print(e.toString());
       }

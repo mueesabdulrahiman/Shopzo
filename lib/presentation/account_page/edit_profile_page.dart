@@ -172,7 +172,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                               listen: false)
                                           .readOnly;
                                   if (readOnly == false) {
-                                    showToastMessage('Profile Updated');
+                                    showToastMessage('Profile Updated', null);
                                   }
 
                                   context.read<AuthenticationBloc>().add(

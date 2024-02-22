@@ -29,6 +29,11 @@ class LogoutUser extends AuthenticationEvent {}
 
 class PasswordVisibility extends AuthenticationEvent {}
 
+class ResetPassword extends AuthenticationEvent {
+  final String email;
+  const ResetPassword({required this.email});
+}
+
 class LoadCustomerDetails extends AuthenticationEvent {}
 
 class EditCustomerDetails extends AuthenticationEvent {

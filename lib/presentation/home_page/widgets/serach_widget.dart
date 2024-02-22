@@ -5,10 +5,11 @@ import 'package:shop_x/logic_layer/home_page/home_page_event.dart';
 import 'package:shop_x/utils/debouncer.dart';
 import 'package:sizer/sizer.dart';
 
-class searchWidget extends StatelessWidget {
-  searchWidget({
-    Key? key,
-  }) : super(key: key);
+// ignore: must_be_immutable
+class SearchWidget extends StatelessWidget {
+  SearchWidget({
+    super.key,
+  });
 
   final _debounce = Debouncer(milliseconds: 500);
   bool folded = true;
@@ -35,16 +36,12 @@ class searchWidget extends StatelessWidget {
               Expanded(
                 child: Container(
                   padding: EdgeInsets.only(left: 10.sp),
-                  // color: Theme.of(context).scaffoldBackgroundColor,
                   child: folded
                       ? null
                       : TextField(
                           autofocus: true,
                           decoration: InputDecoration(
-                            // fillColor:
-                            //     Theme.of(context).scaffoldBackgroundColor,
-                            // filled: true,
-                            //  Theme.of(context).scaffoldBackgroundColor,
+                          
                             hintText: 'Enter Search Product',
                             hintStyle:
                                 TextStyle(fontFamily: 'Lato', fontSize: 12.sp),

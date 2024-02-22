@@ -5,7 +5,7 @@ import 'package:shop_x/presentation/account_page/edit_profile_page.dart';
 import 'package:shop_x/presentation/account_page/setting_page.dart';
 import 'package:shop_x/presentation/account_page/widgets/custom_dialog_box.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
-import 'package:shop_x/presentation/widgets/unAuth.dart';
+import 'package:shop_x/presentation/widgets/un_auth.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 

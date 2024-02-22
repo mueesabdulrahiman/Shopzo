@@ -90,7 +90,7 @@ class SettingPageState extends State<SettingPage> {
 
                     await Future.delayed(Duration.zero);
                     await SharedPrefService.logout();
-                    showToastMessage('Account deleted');
+                    showToastMessage('Account deleted', null);
                     Navbar.notifier.value = 0;
                     Navbar.notifier.notifyListeners();
                     navigator.pop();

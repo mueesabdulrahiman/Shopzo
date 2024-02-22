@@ -1,8 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/globals.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
@@ -15,22 +14,25 @@ import 'package:shop_x/presentation/flash_page.dart';
 import 'package:shop_x/presentation/main_page.dart';
 import 'package:shop_x/utils/theme.dart';
 import 'package:sizer/sizer.dart';
-
 import 'globals.dart' as globals;
 
+
+
 Future<void> main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setEnabledSystemUIMode(
-  //   SystemUiMode.immersiveSticky,
-  // );
-  // await SystemChannels.platform.invokeMethod<void>(
-  //   'SystemChrome.restoreSystemUIOverlays',
-  // );
   globals.appNavigator = GlobalKey<NavigatorState>();
+
+   HttpOverrides.global = MyHttpOverrides();
+
 
   runApp(
     DevicePreview(enabled: false, builder: (context) => const MyApp()),
   );
+
+  
+
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
               theme: lightTheme,
               themeMode: state,
               darkTheme: darkTheme,
-              home: const SpalshScreenPage(),
+              home: const MainPage(),
             );
           },
         );
@@ -74,3 +76,12 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+

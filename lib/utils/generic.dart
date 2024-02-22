@@ -23,14 +23,6 @@ class BasePageState<T extends BasePage> extends State<T> {
                 fontSize: 15.sp)),
         centerTitle: true,
         automaticallyImplyLeading: true,
-        // title: const Text(
-        //   'Order Details',
-        //   style: TextStyle(
-        //       color: Colors.black,
-        //       fontFamily: 'Lato',
-        //       fontWeight: FontWeight.bold),
-        // ),
-        // centerTitle: true,
       ),
       body: SingleChildScrollView(
           child: Column(
