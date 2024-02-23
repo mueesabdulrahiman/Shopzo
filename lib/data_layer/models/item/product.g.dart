@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sample.dart';
+part of 'product.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Sample _$SampleFromJson(Map<String, dynamic> json) => Sample(
+Product _$SampleFromJson(Map<String, dynamic> json) => Product(
       id: json['id'] as int?,
       name: json['name'] as String?,
       status: json['status'] as String?,
@@ -29,7 +29,7 @@ Sample _$SampleFromJson(Map<String, dynamic> json) => Sample(
       flag: json['flag'] as bool? ?? false,
     )..inStock = json['in_stock'] as bool?;
 
-Map<String, dynamic> _$SampleToJson(Sample instance) => <String, dynamic>{
+Map<String, dynamic> _$SampleToJson(Product instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'status': instance.status,

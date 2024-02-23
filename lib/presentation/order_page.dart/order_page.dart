@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/orders.dart';
-import 'package:shop_x/presentation/order_page.dart/widgets/orderCard.dart';
-import 'package:shop_x/presentation/widgets/unAuth.dart';
+import 'package:shop_x/presentation/order_page.dart/widgets/order_card.dart';
+import 'package:shop_x/presentation/widgets/un_auth.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 

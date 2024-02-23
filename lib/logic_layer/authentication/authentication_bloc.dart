@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +59,17 @@ class AuthenticationBloc
       emit(AuthenticationPasswordVisibility(passwordVisible: passwordVisible));
     });
 
+    on<ResetPassword>((event, emit) async {
+      try {
+        final result = await apiServices.initiatePassswordReset(event.email);
+        if (result) {
+          emit(AuthenticationPasswordChanged());
+        }
+      } catch (e) {
+        emit(const AuthenticationError());
+      }
+    });
+
     on<LoadCustomerDetails>((event, emit) async {
       try {
         emit(Loading());
@@ -74,7 +83,6 @@ class AuthenticationBloc
     });
 
     on<EditCustomerDetails>((event, emit) async {
-      log('readonly');
       try {
         emit(Loading());
         if (readOnly) {

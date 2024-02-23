@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-void showDialogBox(BuildContext context,
- void Function() onPressed,
-    {required String title,
-    required String description}) {
+void showDialogBox(BuildContext context, void Function() onPressed,
+    {required String title, required String description}) {
   showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
           title: Text(title,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'Lato', fontSize: 12.sp)),
+              style: TextStyle(
+                  fontFamily: 'Lato',
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold)),
           content: Text(description,
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp)),
@@ -19,8 +20,7 @@ void showDialogBox(BuildContext context,
           actionsAlignment: MainAxisAlignment.spaceEvenly,
           actions: [
             TextButton(
-                onPressed:  onPressed,
-                
+                onPressed: onPressed,
                 child: Text('Yes',
                     style: TextStyle(fontFamily: 'Lato', fontSize: 10.sp))),
             TextButton(

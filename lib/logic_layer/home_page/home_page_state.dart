@@ -10,14 +10,13 @@ class HomePageInitial extends HomePageState {}
 class ProductsLoading extends HomePageState {}
 
 class ProductsLoaded extends HomePageState {
-  final List<Sample> products;
-  //final List<Sample> searchProducts;
+  final List<Product> products;
   final bool flag;
   ProductsLoaded({required this.products, this.flag = true});
 }
 
 class SearchedProducts extends HomePageState {
-  final List<Sample> searchProducts;
+  final List<Product> searchProducts;
   SearchedProducts({required this.searchProducts});
 }
 
@@ -41,8 +40,8 @@ class CategoriesLoading extends HomePageState {}
 
 class HomeDataLoaded extends HomePageState {
   final List<Categories> categories;
-  final List<Sample> products;
-  final List<Sample> categoryProducts;
+  final List<Product> products;
+  final List<Product> categoryProducts;
   HomeDataLoaded(
       {required this.categories,
       required this.products,

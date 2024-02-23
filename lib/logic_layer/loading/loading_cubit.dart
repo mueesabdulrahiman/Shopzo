@@ -8,19 +8,7 @@ class LoadingCubit extends Cubit<LoadingState> {
   bool isloading = true;
   bool unloading = false;
 
-  // void load(bool flag) {
-  //   if (flag) {
-  //     log('loading--state: $flag');
-  //     isloading = true;
-  //     emit(LoadingActive());
-  //     //isloading = false;
-  //   } else {
-  //     isloading = false;
-  //     log('loading--in--state: $flag');
-  //     emit(LoadingInActive());
-  //     //isloading = null;
-  //   }
-  // }
+ 
   void loadingActive() {
     emit(LoadingActive());
   }

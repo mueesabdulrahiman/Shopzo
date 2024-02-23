@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Navbar extends StatelessWidget {
   const Navbar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static ValueNotifier<int> notifier = ValueNotifier(0);
 
@@ -14,8 +14,7 @@ class Navbar extends StatelessWidget {
       builder: (context, value, _) {
         return BottomNavigationBar(
           backgroundColor: Theme.of(context).navigationBarTheme.backgroundColor,
-          // const Color(0xFF424242), // theme.dark
-          //elevation: 8.0,
+         
           type: BottomNavigationBarType.fixed,
           landscapeLayout: BottomNavigationBarLandscapeLayout.spread,
           currentIndex: notifier.value,

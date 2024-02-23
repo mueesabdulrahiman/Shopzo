@@ -92,6 +92,7 @@ class SettingPageState extends State<SettingPage> {
                     await SharedPrefService.logout();
                     showToastMessage('Account deleted');
                     Navbar.notifier.value = 0;
+                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
                     Navbar.notifier.notifyListeners();
                     navigator.pop();
                     Navigator.of(settingPageKey.currentContext!).pop();

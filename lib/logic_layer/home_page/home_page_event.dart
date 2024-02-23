@@ -1,10 +1,4 @@
 import 'package:equatable/equatable.dart';
-// import 'package:flutter/material.dart';
-
-// enum HomePageEvents {
-//   fetchProducts,
-//   searchProducts(isSearch: bool);
-// }
 
 abstract class HomePageEvent extends Equatable {
   @override
@@ -19,10 +13,7 @@ class SearchProducts extends HomePageEvent {
   SearchProducts({this.searchQuery, this.clearQuery});
 }
 
-class SearchAnimation extends HomePageEvent {
-  // final bool flag;
-  // SearchAnimation({required this.flag});
-}
+class SearchAnimation extends HomePageEvent {}
 
 class FetchCategories extends HomePageEvent {}
 

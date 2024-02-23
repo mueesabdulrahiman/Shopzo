@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_x/data_layer/models/samples/sample.dart';
+import 'package:shop_x/data_layer/models/item/product.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/presentation/home_page/product_details_page.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
@@ -10,9 +10,9 @@ import 'package:sizer/sizer.dart';
 class BottomSection extends StatefulWidget {
   const BottomSection({super.key, required this.products});
 
-  static late ValueNotifier<List<Sample>> clickedCategoryProducts;
+  static late ValueNotifier<List<Product>> clickedCategoryProducts;
 
-  final List<Sample> products;
+  final List<Product> products;
 
   @override
   State<BottomSection> createState() => _BottomSectionState();
@@ -37,7 +37,7 @@ class _BottomSectionState extends State<BottomSection> {
   }
 }
 
-_buildProductList(BuildContext context, List<Sample> products) {
+_buildProductList(BuildContext context, List<Product> products) {
   final device = SizerUtil.deviceType == DeviceType.mobile ? 2 : 3;
 
   return GridView.count(

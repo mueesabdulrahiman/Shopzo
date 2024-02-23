@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +23,8 @@ class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {
           MaterialPageRoute(builder: (ctx) => const SuccessPage()));
       if (CartPage.cartProductsNotifier.value.isNotEmpty) {
         customerDetails = await apiServices.getCustomerDetails();
-        log('cus: ${customerDetails!.shipping!.toJson()}');
-        // emit(UserDetails(userDetails: customerDetails!));
 
         if (customerDetails?.shipping != null) {
-          log('id: ${customerDetails?.id}');
           orderModel.shipping = Shipping1();
           orderModel.customerId = customerDetails?.id;
 
@@ -50,7 +45,6 @@ class OrderPageBloc extends Bloc<OrderPageEvent, OrderPageState> {
           }
 
           orderCreated = await apiServices.createOrder(orderModel);
-          log("order result: $orderCreated");
           emit(OrderCreated(orders: orderCreated));
 
            CartPage.cartProductsNotifier.value.clear();

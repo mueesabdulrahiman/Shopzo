@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shop_x/presentation/main_page.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shop_x/presentation/authentication_page/login_page.dart';
 

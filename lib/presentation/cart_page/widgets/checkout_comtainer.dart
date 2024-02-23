@@ -89,7 +89,6 @@ Widget _buildCheckoutButton(BuildContext context) {
       style: TextStyle(
         fontFamily: 'Lato',
         fontSize: 10.sp,
-        //  color: Theme.of(context).textTheme.bodyLarge?.color
       ),
     ),
   );

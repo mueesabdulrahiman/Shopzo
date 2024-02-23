@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_x/config.dart';
-import 'package:shop_x/presentation/account_page/notifications_page.dart';
+import 'package:shop_x/utils/config.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 

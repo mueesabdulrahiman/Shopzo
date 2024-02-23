@@ -1,13 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:shop_x/data_layer/models/samples/tag.dart';
+import 'package:shop_x/data_layer/models/item/tag.dart';
 
 import 'category.dart';
 import 'image.dart';
 
-part 'sample.g.dart';
+part 'product.g.dart';
 
 @JsonSerializable()
-class Sample {
+class Product {
   @JsonKey(name: 'id')
   int? id;
   @JsonKey(name: 'name')
@@ -38,7 +38,7 @@ class Sample {
   List<Imagee>? images;
   bool flag;
 
-  Sample(
+  Product(
       {this.id,
       this.name,
       this.status,
@@ -54,7 +54,7 @@ class Sample {
       this.images,
       this.flag =false});
 
-  factory Sample.fromJson(Map<String, dynamic> json) {
+  factory Product.fromJson(Map<String, dynamic> json) {
     return _$SampleFromJson(json);
   }
 

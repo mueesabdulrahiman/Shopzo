@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          searchWidget(),
+          SearchWidget(),
           SizedBox(
             width: 5.w,
           ),

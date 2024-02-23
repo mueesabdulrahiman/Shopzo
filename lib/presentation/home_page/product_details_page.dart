@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_x/data_layer/models/samples/category.dart';
-import 'package:shop_x/data_layer/models/samples/image.dart';
-import 'package:shop_x/data_layer/models/samples/tag.dart';
+import 'package:shop_x/data_layer/models/item/category.dart';
+import 'package:shop_x/data_layer/models/item/image.dart';
+import 'package:shop_x/data_layer/models/item/tag.dart';
 import 'package:shop_x/logic_layer/cart_page/cart_page_cubit.dart';
 import 'package:shop_x/presentation/home_page/widgets/cart_counter.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 final productSize = MediaQuery.of(_scaffoldKey.currentContext!).size;
 
+// ignore: must_be_immutable
 class ProductDetailsPage extends StatelessWidget {
   ProductDetailsPage(
       {super.key,

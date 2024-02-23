@@ -1,16 +1,12 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
 import 'package:shop_x/data_layer/models/customer_registeration.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
-import 'package:shop_x/logic_layer/loading/loading_cubit.dart';
 import 'package:shop_x/presentation/authentication_page/login_page.dart';
-import 'package:shop_x/presentation/main_page.dart';
 import 'package:shop_x/utils/api_exception.dart';
-import 'package:shop_x/utils/form_helper.dart';
-import 'package:shop_x/utils/progressHUD.dart';
+import 'package:shop_x/presentation/widgets/form_helper.dart';
 import 'package:sizer/sizer.dart';
 
 class SignUp extends StatefulWidget {
@@ -283,7 +279,6 @@ class _SignUpState extends State<SignUp> {
                       ),
                       ElevatedButton(
                           onPressed: () async {
-                            log(_emailController.text);
                             final customer = Customer(
                               _emailController.text.trim(),
                               _passwordController.text.trim(),
@@ -307,37 +302,7 @@ class _SignUpState extends State<SignUp> {
                                   RegisteringUser(context, customer: customer));
                             }
 
-                            // final value =
-                            //  context.watch<AuthenticationBloc>().result;
-                            // BlocProvider.of<AuthenticationBloc>(context,
-                            //         listen: false)
-                            //     .result;
-
-                            // if (value) {
-                            //  context.read<LoadingCubit>().loadingInactive();
-
-                            // Navigator.push(
-                            //     _scaffoldKey.currentContext!,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => const SignIn(),
-                            //     ));
-                            //   Navigator.pushAndRemoveUntil(
-                            //       context,
-                            //       MaterialPageRoute(
-                            //           builder: (_) => const SignIn()),
-                            //       (route) => false);
-                            // } else {
-                            //  context.read<LoadingCubit>().loadingInactive();
-
-                            // ScaffoldMessenger.of(_scaffoldKey.currentContext!)
-                            //     .showSnackBar(const SnackBar(
-                            //   content: Text(
-                            //     'Something went wrong',
-                            //   ),
-                            //   duration: Duration(seconds: 2),
-                            // ));
-                            //   }
-                            // }
+                           
                           },
                           child: Text('Sign Up',
                               style: TextStyle(

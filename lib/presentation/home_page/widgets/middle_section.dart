@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/data_layer/models/categories.dart';
@@ -8,7 +7,8 @@ import 'package:shop_x/presentation/widgets/category_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class MiddleSection extends StatelessWidget {
-  const MiddleSection({super.key, required this.size, required this.categories});
+  const MiddleSection(
+      {super.key, required this.size, required this.categories});
 
   final List<Categories> categories;
   final Size size;
@@ -38,6 +38,7 @@ class MiddleSection extends StatelessWidget {
                       e.categories?.map((e) => e.name).toList() ?? [];
                   return categoryNames.contains(data.categoryName);
                 }).toList();
+                // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
                 BottomSection.clickedCategoryProducts.notifyListeners();
               },
               child: CategoryIcon(

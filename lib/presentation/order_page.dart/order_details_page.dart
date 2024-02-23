@@ -38,36 +38,7 @@ class _OrderDetailsPageState extends BasePageState<OrderDetailsPage> {
         );
       },
     );
-    // OrderDetailsModel orderDetailsModel = OrderDetailsModel();
-    // orderDetailsModel.orderId = 1;
-    // orderDetailsModel.orderDate = DateTime.parse('2023-03-11');
-    // orderDetailsModel.paymentMethod = 'Cash On Delivery';
-    // orderDetailsModel.shipping = Shipping();
-    // orderDetailsModel.shipping!.address1 = 'Thalanagar, Ksd';
-    // orderDetailsModel.shipping!.address2 = 'Hampankatte, Mangalore';
-    // orderDetailsModel.shipping!.city = 'Kasaragod';
-    // orderDetailsModel.lineItems = [];
-    // orderDetailsModel.lineItems!.add(LineItems(
-    //   productId: 1,
-    //   productName: 'Test1',
-    //   quantity: 10,
-    //   totalCost: 500,
-    // ));
-    // orderDetailsModel.lineItems!.add(LineItems(
-    //   productId: 2,
-    //   productName: 'Test2',
-    //   quantity: 20,
-    //   totalCost: 5000,
-    // ));
-    // orderDetailsModel.shippingTotal = 100.0;
-    // orderDetailsModel.totalAmount = 1000.0;
-    // return Scaffold(
-    //     appBar: AppBar(
-    //       elevation: 0,
-    //       title: const Text('order Details'),
-    //       centerTitle: true,
-    //     ),
-    //     body: orderDetailsUI(orderDetailsModel));
+    
   }
 
   Widget orderDetailsUI(OrderDetailsModel model) {

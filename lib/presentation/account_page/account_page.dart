@@ -5,7 +5,7 @@ import 'package:shop_x/presentation/account_page/edit_profile_page.dart';
 import 'package:shop_x/presentation/account_page/setting_page.dart';
 import 'package:shop_x/presentation/account_page/widgets/custom_dialog_box.dart';
 import 'package:shop_x/presentation/widgets/navbar.dart';
-import 'package:shop_x/presentation/widgets/unAuth.dart';
+import 'package:shop_x/presentation/widgets/un_auth.dart';
 import 'package:shop_x/utils/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -60,6 +60,7 @@ class _AccountPageState extends State<AccountPage> {
           Navigator.pop(context);
           await SharedPrefService.logout();
           Navbar.notifier.value = 0;
+          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           Navbar.notifier.notifyListeners();
         }, title: 'Logout?', description: 'Are you sure, you want to logout');
       }),
@@ -177,25 +178,29 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildRow(OptionList optionList) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 1.h, 0, 1.h),
-      child: ListTile(
-        leading: Padding(
-          padding: EdgeInsets.all(8.sp),
-          child: Icon(optionList.optionIcon, size: 20.sp, color: Colors.green),
-        ),
-        title: Text(
-          optionList.optionTitle,
-          style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge?.color,
-              fontSize: 13.sp,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Lato'),
-        ),
-        trailing: Icon(
-          Icons.keyboard_arrow_right,
-          size: 20.sp,
-          color: Theme.of(context).textTheme.bodyMedium?.color,
-        ),
+      child: InkWell(
+        highlightColor: Colors.transparent,
         onTap: optionList.onTap,
+        child: ListTile(
+          leading: Padding(
+            padding: EdgeInsets.all(8.sp),
+            child:
+                Icon(optionList.optionIcon, size: 20.sp, color: Colors.green),
+          ),
+          title: Text(
+            optionList.optionTitle,
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontSize: 13.sp,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lato'),
+          ),
+          trailing: Icon(
+            Icons.keyboard_arrow_right,
+            size: 20.sp,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/data_layer/models/user_details_model.dart';
 import 'package:shop_x/logic_layer/authentication/authentication_bloc.dart';
 import 'package:shop_x/presentation/account_page/widgets/toast_widget.dart';
-import 'package:shop_x/utils/form_helper.dart';
+import 'package:shop_x/presentation/widgets/form_helper.dart';
 import 'package:sizer/sizer.dart';
 
 class EditProfilePage extends StatefulWidget {
