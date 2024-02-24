@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_x/data_layer/data_providers/api_services.dart';
@@ -25,7 +24,7 @@ Future<void> main() async {
   globals.appNavigator = GlobalKey<NavigatorState>();
 
   runApp(
-    DevicePreview(enabled: false, builder: (context) => const MyApp()),
+    const MyApp(),
   );
 }
 
@@ -56,8 +55,8 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               key: snackbarKey,
               debugShowCheckedModeBanner: false,
-              locale: DevicePreview.locale(context),
-              builder: DevicePreview.appBuilder,
+              //locale: DevicePreview.locale(context),
+              //builder: DevicePreview.appBuilder,
               navigatorKey: globals.appNavigator,
               theme: lightTheme,
               themeMode: state,

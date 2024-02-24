@@ -47,14 +47,20 @@ class _MainPageState extends State<MainPage> {
 
 Future<void> initPlatformState() async {
 //  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  await OneSignal.shared.setAppId(Config.onesignalId);
-  
+  OneSignal.initialize(Config.onesignalId);
 
-  OneSignal.shared.setNotificationOpenedHandler((openedResult) {
-     openedResult.notification.additionalData;
+  OneSignal.Notifications.requestPermission(true);
+
+  OneSignal.Notifications.addClickListener((event) {
+    event.notification.additionalData;
     globals.appNavigator!.currentState!
         .push(MaterialPageRoute(builder: (context) => const MainPage()));
   });
+  // OneSignal.setNotificationOpenedHandler((openedResult) {
+  //   openedResult.notification.additionalData;
+  //   globals.appNavigator!.currentState!
+  //       .push(MaterialPageRoute(builder: (context) => const MainPage()));
+  // });
 
   // OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
   //   event.complete(event.notification);
